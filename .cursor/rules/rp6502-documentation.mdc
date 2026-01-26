@@ -1,0 +1,86 @@
+---
+description: "Documentation resources for RP6502 (Picocomputer 6502) learning and development"
+alwaysApply: true
+---
+
+# RP6502 Learning Documentation Resources
+
+When working on RP6502-related tasks, use the following documentation resources in priority order:
+
+## Primary RP6502 Documentation
+
+1. **Picocomputer Official Documentation** - https://picocomputer.github.io/index.html
+   - Main documentation site for RP6502
+   - Hardware: https://picocomputer.github.io/hardware.html
+   - RP6502-RIA: https://picocomputer.github.io/ria.html
+   - RP6502-VGA: https://picocomputer.github.io/vga.html
+   - RP6502-OS: https://picocomputer.github.io/os.html
+   - Use for: Hardware specs, RIA/VGA features, OS API, memory maps, register documentation
+
+2. **Picocomputer GitHub Documentation**
+   - Official repository: https://github.com/picocomputer
+   - Use for: Source code, examples, community discussions
+   - Note: For RP6502-specific documentation, use the official website (resource 1)
+
+## Raspberry Pi Pico Foundation Documentation
+
+3. **Raspberry Pi Microcontrollers Documentation** - https://www.raspberrypi.com/documentation/microcontrollers/
+   - Official Raspberry Pi microcontroller documentation
+   - Use for: General RP2040/Pico hardware information, getting started guides
+
+4. **Pico SDK Documentation** - https://www.raspberrypi.com/documentation/pico-sdk/
+   - Official Pico SDK API reference
+   - Use for: SDK functions, hardware APIs, programming guides
+
+## Educational Resources
+
+6. **Raspberry Pi Pico Lectures 2025** - https://ece4760.github.io/
+   - Cornell ECE4760 course materials
+   - Use for: PIO examples, VGA drivers, communication protocols, algorithms
+   - Topics include: VGA generation, PIO programming, DMA, networking, audio
+
+## Context7 MCP Server
+
+7. **Context7 MCP for Raspberry Pi Pico Docs**
+   - **Server**: `user-context7` or `context7`
+   - Use the context7 MCP server to fetch up-to-date Raspberry Pi Pico documentation
+   - Query for: RP2040 datasheet, Pico SDK functions, hardware APIs
+   - Use when: Need current/live Pico documentation that may have changed
+   - **Important**: This server contains ONLY Raspberry Pi Pico documentation, NOT RP6502/Picocomputer documentation
+
+## MCP RAG Documentation (PDFs)
+
+Both RAGs contain the same Raspberry Pi Pico related PDFs. They are being tested to determine which one performs better.
+
+**Raspberry Pi Pico Related PDFs** (available in both RAGs):
+- `raspberry-pi-debug-probe-product-brief.pdf` - Debug probe information
+- `RP-008276-DS-1-getting-started-with-pico.pdf` - Getting started guide
+- `RP-008279-DS-1-hardware-design-with-rp2040.pdf` - Hardware design guide
+- `RP-008307-DS-1-pico-datasheet.pdf` - Pico datasheet
+- `RP-008371-DS-1-rp2040-datasheet.pdf` - RP2040 microcontroller datasheet
+- `RP-008373-DS-2-rp2350-datasheet.pdf` - RP2350 microcontroller datasheet
+- `RP-009085-KB-1-raspberry-pi-pico-c-sdk.pdf` - Pico C SDK documentation
+
+8. **Local RAG (user-local-rag)** - MCP server for document search
+   - **Server**: `user-local-rag`
+   - **Tools**: `query_documents`, `list_files`, `ingest_file`, `ingest_data`, `delete_file`, `status`
+   - **Use for**: Searching within PDF documentation, accessing Raspberry Pi Pico datasheets and guides
+   - **Note**: Contains the same PDFs as user-pdfrag (see list above)
+
+9. **PDF RAG (user-pdfrag)** - MCP server for PDF management
+   - **Server**: `user-pdfrag`
+   - **Tools**: `pdf_add`, `pdf_remove`, `pdf_list`, `pdf_search_similarity`, `pdf_search_keywords`
+   - **Use for**: Managing and searching PDF documents related to RP6502 and Raspberry Pi Pico
+   - **Note**: Contains the same PDFs as user-local-rag (see list above)
+
+## Workspace Structure
+
+- **Workspace Projects Guide**: `/Users/nenaddjordjevic/CProjects/rp6502-learning/notes/WORKSPACE_PROJECTS.md`
+  - Comprehensive overview of all 12 projects in the RP6502 workspace
+  - Describes purpose and contents of each project
+  - Shows when to use each project during learning
+  - Use for: Understanding workspace structure, finding relevant projects, navigating the codebase
+
+## When Answering Questions
+
+- Always cite the source documentation you're referencing
