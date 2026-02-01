@@ -54,9 +54,23 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
+### 4. **picocomputer.github.io** - RP6502 Documentation Source
+**Path**: `/Users/nenaddjordjevic/CProjects/picocomputer.github.io/`
+
+**Purpose**: Source repository for the official Picocomputer 6502 documentation website (https://picocomputer.github.io/)
+
+**Key Contents**:
+- `docs/source/` - Sphinx/RST source files (index.rst, hardware.rst, ria.rst, ria_w.rst, vga.rst, os.rst)
+- `docs/source/_static/` - Static assets (schematic PDF, gerbers, BOM CSVs, assembly zip)
+- `2023-06-07-rp6502.pdf` - Schematic PDF
+
+**Use For**: Reading documentation source, offline access to RP6502 docs, contributing to documentation, accessing schematic PDF and BOM files locally
+
+---
+
 ## Development Tools & Templates
 
-### 4. **vscode-cc65** - CC65 Development Template
+### 5. **vscode-cc65** - CC65 Development Template
 **Path**: `/Users/nenaddjordjevic/CProjects/vscode-cc65/`
 
 **Purpose**: VS Code project template for developing 6502 software using CC65 compiler
@@ -71,7 +85,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 5. **vscode-llvm-mos** - LLVM-MOS Development Template
+### 6. **vscode-llvm-mos** - LLVM-MOS Development Template
 **Path**: `/Users/nenaddjordjevic/CProjects/vscode-llvm-mos/`
 
 **Purpose**: VS Code project template for developing 6502 software using LLVM-MOS compiler
@@ -86,7 +100,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 6. **ehbasic** - Enhanced 6502 BASIC
+### 7. **ehbasic** - Enhanced 6502 BASIC
 **Path**: `/Users/nenaddjordjevic/CProjects/ehbasic/`
 
 **Purpose**: Enhanced 6502 BASIC interpreter ported to RP6502
@@ -102,7 +116,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ## Compiler & SDK Projects
 
-### 7. **llvm-mos-sdk** - LLVM-MOS SDK
+### 8. **llvm-mos-sdk** - LLVM-MOS SDK
 **Path**: `/Users/nenaddjordjevic/CProjects/llvm-mos-sdk/`
 
 **Purpose**: LLVM-based compiler toolchain and platform libraries for 6502 systems
@@ -117,9 +131,26 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
+### 9. **cc65** - CC65 Compiler and Libraries
+**Path**: `/Users/nenaddjordjevic/CProjects/cc65/`
+
+**Purpose**: C and assembly cross-compiler and runtime library for 6502/65C02 systems
+
+**Documentation**: https://cc65.github.io/doc/rp6502.html — Picocomputer 6502–specific cc65 info (binary format, memory layout, `rp6502.h` / `rp6502.inc`)
+
+**Key Features**:
+- C compiler (cc65), assembler (ca65), linker (ld65)
+- C runtime library and platform-specific libraries
+- RP6502 support (used by vscode-cc65 template and ehbasic)
+- Long-standing 6502 toolchain
+
+**Use For**: Compiling C and assembly for RP6502, reference for cc65-specific code, building ehbasic and CC65-based examples
+
+---
+
 ## Raspberry Pi Pico Reference Projects
 
-### 8. **pico-sdk** - Official Pico SDK
+### 10. **pico-sdk** - Official Pico SDK
 **Path**: `/Users/nenaddjordjevic/CProjects/pico-sdk/`
 
 **Purpose**: Official Raspberry Pi Pico SDK - C/C++ libraries and APIs for RP2040
@@ -134,7 +165,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 9. **pico-examples** - Official Pico Examples
+### 11. **pico-examples** - Official Pico Examples
 **Path**: `/Users/nenaddjordjevic/CProjects/pico-examples/`
 
 **Purpose**: Official example programs for Raspberry Pi Pico
@@ -150,7 +181,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 10. **pico-extras** - Additional Pico Libraries
+### 12. **pico-extras** - Additional Pico Libraries
 **Path**: `/Users/nenaddjordjevic/CProjects/pico-extras/`
 
 **Purpose**: Additional libraries not yet in the main SDK
@@ -165,7 +196,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 11. **Hunter-Adams-RP2040-Demos** - Educational Demos
+### 13. **Hunter-Adams-RP2040-Demos** - Educational Demos
 **Path**: `/Users/nenaddjordjevic/CProjects/Hunter-Adams-RP2040-Demos/`
 
 **Purpose**: Collection of RP2040 examples from Cornell ECE4760 course
@@ -182,7 +213,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 12. **documentation** - Raspberry Pi Documentation
+### 14. **documentation** - Raspberry Pi Documentation
 **Path**: `/Users/nenaddjordjevic/CProjects/documentation/`
 
 **Purpose**: Source for Raspberry Pi official documentation website
@@ -194,6 +225,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 ## Learning Path Integration
 
 ### Phase 1-2: Hardware & Assembly
+- **picocomputer.github.io/** - Read official docs (hardware, schematic PDF)
 - **schematic/** - Study the hardware design
 - **rp6502/** - Understand firmware requirements
 
@@ -224,15 +256,17 @@ This document briefly describes each project in the RP6502 workspace and their p
 |---------|------------|---------------|
 | **rp6502** | Firmware source | Phase 4-5, 8 |
 | **examples** | Learning to program | Phase 3, 6-7 |
+| **picocomputer.github.io** | RP6502 docs source | Phase 1-2 |
 | **schematic** | Hardware understanding | Phase 1-2 |
 | **vscode-cc65** | Development setup | Phase 6-7 |
 | **vscode-llvm-mos** | Development setup | Phase 6-7 |
 | **ehbasic** | BASIC programming | Phase 3, 6-7 |
+| **llvm-mos-sdk** | Modern compiler | Phase 7-8 |
+| **cc65** | C/asm compiler | Phase 6-7 |
 | **pico-sdk** | Pico API reference | Phase 4-5 |
 | **pico-examples** | Pico learning | Phase 4-5 |
 | **pico-extras** | Video/audio | Phase 5 |
 | **Hunter-Adams** | Advanced techniques | Phase 8 |
-| **llvm-mos-sdk** | Modern compiler | Phase 7-8 |
 
 ---
 

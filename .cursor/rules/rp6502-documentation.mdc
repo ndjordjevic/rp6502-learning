@@ -15,6 +15,7 @@ When working on RP6502-related tasks, use the following documentation resources 
    - RP6502-RIA: https://picocomputer.github.io/ria.html
    - RP6502-VGA: https://picocomputer.github.io/vga.html
    - RP6502-OS: https://picocomputer.github.io/os.html
+   - **Workspace**: When in workspace, source at `/Users/nenaddjordjevic/CProjects/picocomputer.github.io/` (RST in `docs/source/`, assets in `docs/source/_static/`)
    - Use for: Hardware specs, RIA/VGA features, OS API, memory maps, register documentation
 
 2. **Picocomputer GitHub Documentation**
@@ -22,13 +23,17 @@ When working on RP6502-related tasks, use the following documentation resources 
    - Use for: Source code, examples, community discussions
    - Note: For RP6502-specific documentation, use the official website (resource 1)
 
+3. **CC65 RP6502 target** - https://cc65.github.io/doc/rp6502.html
+   - Picocomputer 6502–specific cc65 information (binary format, memory layout, platform headers)
+   - Use for: CC65 memory map, stack/heap, `rp6502.h` / `rp6502.inc`, VIA/RIA register addresses
+
 ## Raspberry Pi Pico Foundation Documentation
 
-3. **Raspberry Pi Microcontrollers Documentation** - https://www.raspberrypi.com/documentation/microcontrollers/
+4. **Raspberry Pi Microcontrollers Documentation** - https://www.raspberrypi.com/documentation/microcontrollers/
    - Official Raspberry Pi microcontroller documentation
    - Use for: General RP2040/Pico hardware information, getting started guides
 
-4. **Pico SDK Documentation** - https://www.raspberrypi.com/documentation/pico-sdk/
+5. **Pico SDK Documentation** - https://www.raspberrypi.com/documentation/pico-sdk/
    - Official Pico SDK API reference
    - Use for: SDK functions, hardware APIs, programming guides
 
@@ -60,6 +65,9 @@ Both RAGs contain the same Raspberry Pi Pico related PDFs. They are being tested
 - `RP-008371-DS-1-rp2040-datasheet.pdf` - RP2040 microcontroller datasheet
 - `RP-008373-DS-2-rp2350-datasheet.pdf` - RP2350 microcontroller datasheet
 - `RP-009085-KB-1-raspberry-pi-pico-c-sdk.pdf` - Pico C SDK documentation
+- `Programming The Raspberry Pi Pico_W In C, Third Edition_nodrm.pdf` - Pico/Pico W C programming book
+- `Quadros D. Knowing the RP2040. A Guide for Programmers 2022.pdf` - RP2040 programmer guide
+- `rp2040_assembly_language_programming_arm_cortex-m0_on_the_raspberry_pi_pico_etc._z-lib.org_-2.pdf` - RP2040 assembly programming book
 
 8. **Local RAG (user-local-rag)** - MCP server for document search
    - **Server**: `user-local-rag`
@@ -76,7 +84,7 @@ Both RAGs contain the same Raspberry Pi Pico related PDFs. They are being tested
 ## Workspace Structure
 
 - **Workspace Projects Guide**: `/Users/nenaddjordjevic/CProjects/rp6502-learning/notes/WORKSPACE_PROJECTS.md`
-  - Comprehensive overview of all 12 projects in the RP6502 workspace
+  - Comprehensive overview of all 14 projects in the RP6502 workspace
   - Describes purpose and contents of each project
   - Shows when to use each project during learning
   - Use for: Understanding workspace structure, finding relevant projects, navigating the codebase

@@ -13,18 +13,20 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - Detailed guide: `notes/WORKSPACE_PROJECTS.md`
 
 **Workspace Projects Checklist:**
-- [ ] **rp6502/** - Main firmware source code (RIA and VGA)
-- [ ] **examples/** - Example 6502 programs to learn from
-- [ ] **schematic/** - Hardware design files (KiCad)
-- [ ] **vscode-cc65/** - CC65 development template
-- [ ] **vscode-llvm-mos/** - LLVM-MOS development template
-- [ ] **ehbasic/** - Enhanced 6502 BASIC interpreter
-- [ ] **llvm-mos-sdk/** - LLVM-MOS compiler and SDK
-- [ ] **pico-sdk/** - Official Raspberry Pi Pico SDK
-- [ ] **pico-examples/** - Official Pico example programs
-- [ ] **pico-extras/** - Additional Pico libraries (scanvideo, audio)
-- [ ] **Hunter-Adams-RP2040-Demos/** - Educational Pico demos
-- [ ] **documentation/** - Raspberry Pi documentation source
+- [x] **rp6502/** - Main firmware source code (RIA and VGA)
+- [x] **examples/** - Example 6502 programs to learn from
+- [x] **schematic/** - Hardware design files (KiCad)
+- [x] **picocomputer.github.io/** - Official RP6502 documentation source
+- [x] **vscode-cc65/** - CC65 development template
+- [x] **vscode-llvm-mos/** - LLVM-MOS development template
+- [x] **ehbasic/** - Enhanced 6502 BASIC interpreter
+- [x] **llvm-mos-sdk/** - LLVM-MOS compiler and SDK
+- [x] **cc65/** - CC65 C/assembly compiler and libraries
+- [x] **pico-sdk/** - Official Raspberry Pi Pico SDK
+- [x] **pico-examples/** - Official Pico example programs
+- [x] **pico-extras/** - Additional Pico libraries (scanvideo, audio)
+- [x] **Hunter-Adams-RP2040-Demos/** - Educational Pico demos
+- [x] **documentation/** - Raspberry Pi documentation source
 
 ---
 
@@ -43,33 +45,25 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [x] **U2 - RP6502-RIA (Pico 2 W)**: Interface adapter - controls CPU, provides modern I/O
 - [x] **U3 - AS6C1008**: 128KB SRAM - main system memory
 - [x] **U4 - RP6502-VGA (Pico 2)**: Video adapter - generates VGA/HD output (optional)
-- [ ] **U5 - W65C22S**: VIA chip - classic 6502 I/O chip (GPIO, timers)
-- [ ] **U6 - 74AC00**: Quad NAND gates - address decoding logic
-- [ ] **U7 - 74AC02**: Quad NOR gates - address decoding logic
-- [ ] **U8 - 74HC30**: 8-input NAND gate - address decoding logic
-
-**What Each Chip Does (High-Level):**
-- **W65C02S (U1)**: The brain - runs 6502 programs at 800kHz to 8MHz
-- **RIA (U2)**: The modern interface - handles USB, WiFi, Bluetooth, audio, storage, and controls the 6502
-- **SRAM (U3)**: The memory - stores programs and data (64KB visible to 6502)
-- **VGA (U4)**: The display - generates video output (connects to RIA via PIX bus)
-- **VIA (U5)**: Classic I/O - provides GPIO pins for expansion
-- **Logic Chips (U6-U8)**: Address decoding - determines which chip responds to which addresses
+- [x] **U5 - W65C22S**: VIA chip - classic 6502 I/O chip (GPIO, timers)
+- [x] **U6 - 74AC00**: Quad NAND gates - address decoding logic
+- [x] **U7 - 74AC02**: Quad NOR gates - address decoding logic
+- [x] **U8 - 74HC30**: 8-input NAND gate - address decoding logic
 
 ### 1.2 Key Connections (High-Level)
 **Learning Objectives:**
-- [ ] **6502 Bus**: Address (A0-A15), Data (D0-D7), Control (RWB, PHI2, RESB)
-- [ ] **PIX Bus**: 5 wires connecting RIA to VGA (PHI2 + PIX0-3)
-- [ ] **Power**: Two 3.3V rails (+3V3A, +3V3B) for different sections
-- [ ] **VGA Output**: Analog RGB signals via resistor ladders
-- [ ] **Audio Output**: Stereo audio via PWM from RIA
+- [x] **6502 Bus**: Address (A0-A15), Data (D0-D7), Control (RWB, PHI2, RESB)
+- [x] **PIX Bus**: 5 wires connecting RIA to VGA (PHI2 + PIX0-3)
+- [x] **Power**: Two 3.3V rails (+3V3A, +3V3B) for different sections
+- [x] **VGA Output**: Analog RGB signals via resistor ladders
+- [x] **Audio Output**: Stereo audio via PWM from RIA
 
 ### 1.3 Memory Map (High-Level)
 **Learning Objectives:**
-- [ ] **$0000-$FEFF**: System RAM (64KB)
-- [ ] **$FFD0-$FFDF**: VIA registers
-- [ ] **$FFE0-$FFFF**: RIA registers (UART, XRAM access, OS calls)
-- [ ] **$10000-$1FFFF**: Extended RAM (XRAM) - 64KB managed by RIA
+- [x] **$0000-$FEFF**: System RAM (64KB)
+- [x] **$FFD0-$FFDF**: VIA registers
+- [x] **$FFE0-$FFFF**: RIA registers (UART, XRAM access, OS calls)
+- [x] **$10000-$1FFFF**: Extended RAM (XRAM) - 64KB managed by RIA
 
 ---
 
