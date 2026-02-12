@@ -3,97 +3,65 @@ description: "Documentation resources for RP6502 (Picocomputer 6502) learning an
 alwaysApply: true
 ---
 
-# RP6502 Learning Documentation Resources
+# RP6502 documentation sources (priority order)
 
-When working on RP6502-related tasks, use the following documentation resources in priority order:
+Use these sources in order. Prefer **local workspace copies** when available.
 
-## Primary RP6502 Documentation
+## RP6502 / Picocomputer (authoritative)
 
-1. **Picocomputer Official Documentation** - https://picocomputer.github.io/index.html
-   - Main documentation site for RP6502
-   - Hardware: https://picocomputer.github.io/hardware.html
-   - RP6502-RIA: https://picocomputer.github.io/ria.html
-   - RP6502-VGA: https://picocomputer.github.io/vga.html
-   - RP6502-OS: https://picocomputer.github.io/os.html
-   - **Workspace**: When in workspace, source at `/Users/nenaddjordjevic/CProjects/picocomputer.github.io/` (RST in `docs/source/`, assets in `docs/source/_static/`)
-   - Use for: Hardware specs, RIA/VGA features, OS API, memory maps, register documentation
+1. **Picocomputer official docs (website)**: https://picocomputer.github.io/index.html  
+   Key pages: hardware https://picocomputer.github.io/hardware.html • RIA https://picocomputer.github.io/ria.html • VGA https://picocomputer.github.io/vga.html • OS https://picocomputer.github.io/os.html
 
-2. **Picocomputer GitHub Documentation**
-   - Official repository: https://github.com/picocomputer
-   - Use for: Source code, examples, community discussions
-   - Note: For RP6502-specific documentation, use the official website (resource 1)
+2. **Picocomputer official docs (local repo in this workspace)**: `/Users/nenaddjordjevic/CProjects/picocomputer.github.io/`  
+   Source layout: RST in `docs/source/`, assets in `docs/source/_static/`
 
-3. **CC65 RP6502 target** - https://cc65.github.io/doc/rp6502.html
-   - Picocomputer 6502–specific cc65 information (binary format, memory layout, platform headers)
-   - Use for: CC65 memory map, stack/heap, `rp6502.h` / `rp6502.inc`, VIA/RIA register addresses
+3. **Picocomputer GitHub org** (code + discussions): https://github.com/picocomputer  
+   Use for: source code, examples, community discussions. For RP6502 documentation, prefer items 1–2.
 
-## Raspberry Pi Pico Foundation Documentation
+4. **CC65 RP6502 target docs**: https://cc65.github.io/doc/rp6502.html  
+   Use for: CC65 memory layout, `rp6502.h` / `rp6502.inc`, platform-specific details.
 
-4. **Raspberry Pi Microcontrollers Documentation** - https://www.raspberrypi.com/documentation/microcontrollers/
-   - Official Raspberry Pi microcontroller documentation
-   - Use for: General RP2040/Pico hardware information, getting started guides
+## Local workspace projects (code as documentation)
 
-5. **Pico SDK Documentation** - https://www.raspberrypi.com/documentation/pico-sdk/
-   - Official Pico SDK API reference
-   - Use for: SDK functions, hardware APIs, programming guides
+### RP6502 projects
+- **rp6502 firmware source**: `/Users/nenaddjordjevic/CProjects/rp6502/` — RIA/VGA firmware, PIO programs, bus interface
+- **examples (6502 programs)**: `/Users/nenaddjordjevic/CProjects/examples/` — mode demos, gamepad, audio, graphics
+- **schematic (hardware)**: `/Users/nenaddjordjevic/CProjects/schematic/` — KiCad schematics, PCB, assembly files
+- **ehbasic**: `/Users/nenaddjordjevic/CProjects/ehbasic/` — Enhanced BASIC interpreter for RP6502
+- **vscode-cc65**: `/Users/nenaddjordjevic/CProjects/vscode-cc65/` — CC65 development template
+- **vscode-llvm-mos**: `/Users/nenaddjordjevic/CProjects/vscode-llvm-mos/` — LLVM-MOS development template
 
-## Educational Resources
+### Compiler/SDK projects
+- **cc65**: `/Users/nenaddjordjevic/CProjects/cc65/` — CC65 compiler source (C and assembly for 6502)
+- **llvm-mos-sdk**: `/Users/nenaddjordjevic/CProjects/llvm-mos-sdk/` — LLVM-MOS SDK source, platform libs for RP6502
 
-6. **Raspberry Pi Pico Lectures 2025** - https://ece4760.github.io/
-   - Cornell ECE4760 course materials
-   - Use for: PIO examples, VGA drivers, communication protocols, algorithms
-   - Topics include: VGA generation, PIO programming, DMA, networking, audio
+### Raspberry Pi Pico projects
+- **pico-sdk**: `/Users/nenaddjordjevic/CProjects/pico-sdk/` — Official Pico SDK (HAL, PIO, USB, GPIO APIs)
+- **pico-examples**: `/Users/nenaddjordjevic/CProjects/pico-examples/` — Official Pico examples
+- **pico-extras**: `/Users/nenaddjordjevic/CProjects/pico-extras/` — Additional Pico libs (scanvideo used by RP6502-VGA!)
+- **Hunter-Adams-RP2040-Demos**: `/Users/nenaddjordjevic/CProjects/Hunter-Adams-RP2040-Demos/` — Cornell ECE4760 demos
+- **documentation (Pi docs source)**: `/Users/nenaddjordjevic/CProjects/documentation/` — Raspberry Pi official docs source
 
-## Context7 MCP Server
+## External Raspberry Pi Pico / RP2040 docs
 
-7. **Context7 MCP for Raspberry Pi Pico Docs**
-   - **Server**: `user-context7` or `context7`
-   - Use the context7 MCP server to fetch up-to-date Raspberry Pi Pico documentation
-   - Query for: RP2040 datasheet, Pico SDK functions, hardware APIs
-   - Use when: Need current/live Pico documentation that may have changed
-   - **Important**: This server contains ONLY Raspberry Pi Pico documentation, NOT RP6502/Picocomputer documentation
+- Raspberry Pi microcontrollers docs: https://www.raspberrypi.com/documentation/microcontrollers/
+- Pico SDK docs: https://www.raspberrypi.com/documentation/pico-sdk/
+- Cornell ECE4760 Pico lectures (PIO/VGA/DMA): https://ece4760.github.io/
 
-## MCP RAG Documentation (PDFs)
+## Tools for Pico/RP2040 PDFs only (NOT RP6502)
 
-Both RAGs contain the same Raspberry Pi Pico related PDFs. They are being tested to determine which one performs better.
+**Never** use the local/PDF RAGs for RP6502/Picocomputer/6502 questions (they contain **no** RP6502 docs).
 
-**Raspberry Pi Pico Related PDFs** (available in both RAGs):
-- `raspberry-pi-debug-probe-product-brief.pdf` - Debug probe information
-- `RP-008276-DS-1-getting-started-with-pico.pdf` - Getting started guide
-- `RP-008279-DS-1-hardware-design-with-rp2040.pdf` - Hardware design guide
-- `RP-008307-DS-1-pico-datasheet.pdf` - Pico datasheet
-- `RP-008371-DS-1-rp2040-datasheet.pdf` - RP2040 microcontroller datasheet
-- `RP-008373-DS-2-rp2350-datasheet.pdf` - RP2350 microcontroller datasheet
-- `RP-009085-KB-1-raspberry-pi-pico-c-sdk.pdf` - Pico C SDK documentation
-- `Programming The Raspberry Pi Pico_W In C, Third Edition_nodrm.pdf` - Pico/Pico W C programming book
-- `Quadros D. Knowing the RP2040. A Guide for Programmers 2022.pdf` - RP2040 programmer guide
-- `rp2040_assembly_language_programming_arm_cortex-m0_on_the_raspberry_pi_pico_etc._z-lib.org_-2.pdf` - RP2040 assembly programming book
+- **Context7 (Pico docs only)**: server `context7` / `user-context7`
+- **Local RAG (Pico PDFs only)**: server `user-local-rag`
+- **PDF RAG (Pico PDFs only)**: server `user-pdfrag`
 
-8. **Local RAG (user-local-rag)** - MCP server for document search
-   - **Server**: `user-local-rag`
-   - **Tools**: `query_documents`, `list_files`, `ingest_file`, `ingest_data`, `delete_file`, `status`
-   - **Use for**: Searching within PDF documentation, accessing Raspberry Pi Pico datasheets and guides
-   - **Note**: Contains the same PDFs as user-pdfrag (see list above)
+## Workspace navigation
 
-9. **PDF RAG (user-pdfrag)** - MCP server for PDF management
-   - **Server**: `user-pdfrag`
-   - **Tools**: `pdf_add`, `pdf_remove`, `pdf_list`, `pdf_search_similarity`, `pdf_search_keywords`
-   - **Use for**: Managing and searching PDF documents related to RP6502 and Raspberry Pi Pico
-   - **Note**: Contains the same PDFs as user-local-rag (see list above)
+- Workspace projects guide: `/Users/nenaddjordjevic/CProjects/rp6502-learning/notes/WORKSPACE_PROJECTS.md`
 
-## Workspace Structure
+## Answering rules (anti-hallucination)
 
-- **Workspace Projects Guide**: `/Users/nenaddjordjevic/CProjects/rp6502-learning/notes/WORKSPACE_PROJECTS.md`
-  - Comprehensive overview of all 14 projects in the RP6502 workspace
-  - Describes purpose and contents of each project
-  - Shows when to use each project during learning
-  - Use for: Understanding workspace structure, finding relevant projects, navigating the codebase
-
-## When Answering Questions
-
-- **Always cite sources**: Always cite the source documentation you're referencing, including URLs when available
-- **Search priority**: First search the listed documentation resources above. If information is not found there, you may search the internet
-- **Internet search citation**: When using information from internet searches, you must list the specific resources (URLs, websites, articles) where you found the information
-- **Strictly avoid hallucinations**: Never make up or guess information about RP6502, Picocomputer, or related technologies
-- **Be honest about uncertainty**: If information cannot be found in the available documentation resources or through internet search, explicitly state "I don't know" or "I cannot find this information" rather than speculating or inventing details
-- Only provide information that can be verified from the listed documentation sources, workspace codebase, or cited internet resources
+- Cite sources (URL/path) for anything factual.
+- If not found in the sources above, you may search the internet and cite the exact URLs used.
+- If you can’t verify it, say **“I don’t know”** / **“I can’t find this information.”**

@@ -38,6 +38,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 **Resources:**
 - Schematic: `/Users/nenaddjordjevic/CProjects/schematic/rp6502.kicad_sch`
 - Documentation: https://picocomputer.github.io/hardware.html
+- Documentation (local, in workspace): `/Users/nenaddjordjevic/CProjects/picocomputer.github.io/`
 - Schematic image (provided)
 
 **Learning Objectives:**
@@ -58,13 +59,6 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [x] **VGA Output**: Analog RGB signals via resistor ladders
 - [x] **Audio Output**: Stereo audio via PWM from RIA
 
-### 1.3 Memory Map (High-Level)
-**Learning Objectives:**
-- [x] **$0000-$FEFF**: System RAM (64KB)
-- [x] **$FFD0-$FFDF**: VIA registers
-- [x] **$FFE0-$FFFF**: RIA registers (UART, XRAM access, OS calls)
-- [x] **$10000-$1FFFF**: Extended RAM (XRAM) - 64KB managed by RIA
-
 ---
 
 ## Phase 2: Assembly & Hardware Setup
@@ -78,32 +72,80 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - YouTube videos: https://youtube.com/playlist?list=PLvCRDUYedILfHDoD57Yj8BAXNmNJLVM2r
 
 **Learning Objectives:**
-- [ ] Verify you have all parts (check BOM)
-- [ ] Review assembly instructions
-- [ ] Understand component orientation (ICs, capacitors, resistors)
-- [ ] Prepare workspace and tools
-- [ ] Review safety precautions (static electricity, soldering if needed)
+- [ ] Verify you have all ICs (check Active Parts List)
+- [x] Review assembly instructions
+- [x] Understand IC orientation (pin 1 indicators, notch/dot orientation)
+- [ ] Set up anti-static mat and wrist strap at bench and check that they are properly grounded
+- [ ] Tools: multimeter, logic analyzer, chip tester, microscope
 
-**Key Points:**
-- Most components are through-hole (easy to install)
-- ICs go in sockets (no soldering required for ICs)
-- Pay attention to component orientation
-- Use anti-static precautions
+### 2.1.1 Pre-IC Testing & Inspection (Pre-Soldered Board)
+**Goal**: Test and inspect the board before inserting expensive ICs to catch any manufacturing defects
 
-### 2.2 Assembly Steps
+**Visual Inspection:**
+- [ ] Check for solder bridges between adjacent pads/pins
+- [ ] Verify all passive components are installed (resistors, capacitors)
+- [ ] Check for cold solder joints (dull, grainy appearance)
+- [ ] Verify component orientation matches silkscreen markings
+- [ ] Check for missing components (compare to BOM)
+- [ ] Inspect IC sockets for proper installation and pin alignment
+- [ ] Verify connectors (VGA, audio, GPIO headers) are properly soldered
+- [ ] Check for any physical damage (cracks, lifted pads, scratches)
+
+**Continuity Testing (Multimeter):**
+- [ ] **Power Rails**: Test continuity on +3V3A and +3V3B rails (should be isolated from each other)
+- [ ] **Ground Plane**: Verify all GND connections have continuity
+- [ ] **Socket Power Pins**: Check VCC pins on each IC socket connect to appropriate power rail
+- [ ] **Socket Ground Pins**: Check GND pins on each socket connect to ground
+- [ ] **No Shorts**: Verify no continuity between power rails and ground (with no power applied)
+- [ ] **PIX Bus**: Check continuity on PIX bus connections (PHI2, PIX0-3) between RIA and VGA sockets
+- [ ] **6502 Bus**: Verify address/data bus traces have continuity (check a few representative pins)
+
+**Resistance Checks:**
+- [ ] Verify resistor values match BOM (measure a few key ones)
+- [ ] Check decoupling capacitors don't show short circuits
+- [ ] Verify pull-up/pull-down resistors are correct values
+
+**Socket Inspection:**
+- [ ] Verify each socket pin makes good contact (gently probe with multimeter)
+- [ ] Check socket orientation matches silkscreen (pin 1 indicators)
+- [ ] Verify socket pin numbering matches expected IC pinout
+- [ ] Test socket pin continuity to PCB traces
+
+**Power Supply Testing (CAUTION - Only if safe):**
+- [ ] **DO NOT** apply power yet if you haven't verified no shorts
+- [ ] If continuity tests pass, consider brief power test with current-limited supply
+- [ ] Check voltage levels on power rails (should be 3.3V)
+- [ ] Verify no excessive current draw (indicates short circuit)
+- [ ] **Stop immediately** if you see smoke, excessive heat, or unexpected voltages
+
+**Tools Needed:**
+- Digital multimeter (continuity, resistance, voltage modes)
+- Good lighting and magnification (for visual inspection)
+- Anti-static mat and wrist strap (when handling ICs later)
+
+**Safety Notes:**
+- Always test with power OFF for continuity/resistance checks
+- Never apply power if you find shorts between power and ground
+- Use current-limited power supply if testing voltages
+- Keep ICs in anti-static bags until ready to install
+
+### 2.2 Assembly Steps (Pre-Soldered Board)
+**Note**: For pre-soldered boards, passive components and connectors are already installed. Only ICs need to be inserted.
+
 **Learning Objectives:**
-- [ ] Install passive components (resistors, capacitors)
-- [ ] Install logic chips (U6, U7, U8) in sockets
-- [ ] Install main ICs in sockets:
-  - [ ] U1 - W65C02S (40-pin, note orientation)
-  - [ ] U3 - AS6C1008 SRAM (32-pin)
-  - [ ] U5 - W65C22S VIA (40-pin)
-- [ ] Install Raspberry Pi Pico modules:
-  - [ ] U2 - Pico 2 W (RIA) - goes in socket
-  - [ ] U4 - Pico 2 (VGA) - goes in socket
-- [ ] Install connectors (VGA, audio, GPIO headers)
-- [ ] Install reset button
-- [ ] Double-check all connections and orientations
+- [ ] **Install logic chips** (U6, U7, U8) in sockets:
+  - [ ] U6 - 74AC00 Quad NAND (14-pin, note orientation)
+  - [ ] U7 - 74AC02 Quad NOR (14-pin, note orientation)
+  - [ ] U8 - 74HC30 8-input NAND (14-pin, note orientation)
+- [ ] **Install main ICs** in sockets:
+  - [ ] U1 - W65C02S (40-pin, note orientation - pin 1 indicator)
+  - [ ] U3 - AS6C1008 SRAM (32-pin, note orientation)
+  - [ ] U5 - W65C22S VIA (40-pin, note orientation)
+- [ ] **Install Raspberry Pi Pico modules**:
+  - [ ] U2 - Pico 2 W (RIA) - goes in socket (note orientation)
+  - [ ] U4 - Pico 2 (VGA) - goes in socket (note orientation)
+- [ ] Double-check all IC orientations (pin 1 matches socket pin 1)
+- [ ] Verify all ICs are fully seated in sockets
 
 ### 2.3 Firmware Installation
 **Resources:**
