@@ -51,14 +51,6 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [x] **U7 - 74AC02**: Quad NOR gates - address decoding logic
 - [x] **U8 - 74HC30**: 8-input NAND gate - address decoding logic
 
-### 1.2 Key Connections (High-Level)
-**Learning Objectives:**
-- [x] **6502 Bus**: Address (A0-A15), Data (D0-D7), Control (RWB, PHI2, RESB)
-- [x] **PIX Bus**: 5 wires connecting RIA to VGA (PHI2 + PIX0-3)
-- [x] **Power**: Two 3.3V rails (+3V3A, +3V3B) for different sections
-- [x] **VGA Output**: Analog RGB signals via resistor ladders
-- [x] **Audio Output**: Stereo audio via PWM from RIA
-
 ---
 
 ## Phase 2: Assembly & Hardware Setup
@@ -72,14 +64,33 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - YouTube videos: https://youtube.com/playlist?list=PLvCRDUYedILfHDoD57Yj8BAXNmNJLVM2r
 
 **Learning Objectives:**
-- [ ] Verify you have all ICs (check Active Parts List)
+- [x] Verify you have all ICs (check Active Parts List)
 - [x] Review assembly instructions
 - [x] Understand IC orientation (pin 1 indicators, notch/dot orientation)
-- [ ] Set up anti-static mat and wrist strap at bench and check that they are properly grounded
-- [ ] Tools: multimeter, logic analyzer, chip tester, microscope
+- [x] Set up anti-static mat and wrist strap at bench and verify grounding (wrist strap should show 1-2M ohm to ground - this is correct, the resistor protects you from shock)
+- [x] Tools: multimeters, logic analyzer, logic probes, chip tester, oscilloscope, power supply, LCR meter, USB power meter, microscope
+  - [x] Chip Tester Pro V2 — [notes/tools/CHIP_TESTER.md](notes/tools/CHIP_TESTER.md)
+  - [x] Extech EX350 multimeter — [notes/tools/MULTIMETER_EX350.md](notes/tools/MULTIMETER_EX350.md)
+  - [x] FNIRSI DMT-99 multimeter — [notes/tools/MULTIMETER_DMT99.md](notes/tools/MULTIMETER_DMT99.md)
+  - [x] FNIRSI DSO-TC3 (oscilloscope / component tester / signal generator) — [notes/tools/DSO_TC3.md](notes/tools/DSO_TC3.md)
+  - [x] FNIRSI LCR-ST1 (LCR tweezer meter) — [notes/tools/LCR_ST1.md](notes/tools/LCR_ST1.md)
+  - [x] FNIRSI DPS-150 (DC power supply) — [notes/tools/DPS_150.md](notes/tools/DPS_150.md)
+  - [x] FNIRSI SG-003A (signal generator / process calibrator) — [notes/tools/SG_003A.md](notes/tools/SG_003A.md)
+  - [x] DSLogic Plus (logic analyzer) — [notes/tools/DSLOGIC_PLUS.md](notes/tools/DSLOGIC_PLUS.md)
+  - [x] Logic Probe LP-1 — [notes/tools/LOGIC_PROBE_LP1.md](notes/tools/LOGIC_PROBE_LP1.md)
+  - [x] Logic Probe Model 610B — [notes/tools/LOGIC_PROBE_610B.md](notes/tools/LOGIC_PROBE_610B.md)
+  - [x] USB Power Meter (Aideepen USB volt-ammeter) — [notes/tools/USB_POWER_METER.md](notes/tools/USB_POWER_METER.md)
 
 ### 2.1.1 Pre-IC Testing & Inspection (Pre-Soldered Board)
 **Goal**: Test and inspect the board before inserting expensive ICs to catch any manufacturing defects
+
+**Test all ICs with chip tester** (see [notes/tools/CHIP_TESTER.md](notes/tools/CHIP_TESTER.md)):
+- [ ] U1 — W65C02S (Other → WDC → W65C02)
+- [ ] U3 — AS6C1008 SRAM (RAM → 32-pin Static → 628128)
+- [ ] U5 — W65C22S VIA (Other → WDC → W65C22)
+- [x] U6 — 74AC00 Quad NAND (74HC CMOS → 7400)
+- [ ] U7 — 74AC02 Quad NOR (74HC CMOS → 7402)
+- [ ] U8 — 74HC30 8-input NAND (74HC CMOS → 7430)
 
 **Visual Inspection:**
 - [ ] Check for solder bridges between adjacent pads/pins
