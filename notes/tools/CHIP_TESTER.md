@@ -94,7 +94,7 @@ A damaged chip outputting voltages between LOW and HIGH specs could pass the tes
 | **MOS/CSG/Amiga** | 6502/6510 CPUs, 6522 VIA, 6526 CIA, SID, VIC-II, DENISE, PAULA, etc. |
 | **Motorola** | MC6800/6809 CPUs, MC6821 PIA, MC6845 CRTC, etc. |
 | **Op Amps** | LM311, LM358, LM339, etc. (TTL-output only, no internal offset) |
-| **Other** | Z80, AY8910, WDC (W65C02, W65C22, W65C816), 555/556, and many more |
+| **Other Series/Mfr** | Z80, AY8910, WDC (W65C02, W65C22, W65C816), 555/556, and many more |
 | **RAM** | Static and Dynamic RAM, sorted by pin count (16–48 pin) |
 | **ROM** | EPROM/ROM ripping and testing, PAL/GAL readback, CornBit programming |
 
@@ -106,8 +106,8 @@ These are the ICs from the RP6502 board that the Chip Tester Pro V2 can test:
 
 | IC | RP6502 Role | Chip Tester Category | Testable? |
 |----|------------|---------------------|-----------|
-| **U1 — W65C02S** | Main 6502 CPU | Other → WDC → W65C02 | Yes |
-| **U5 — W65C22S** | VIA (I/O chip) | Other → WDC → W65C22 | Yes |
+| **U1 — W65C02S** | Main 6502 CPU | Other Series/Mfr → WDC → W65C02 | Yes |
+| **U5 — W65C22S** | VIA (I/O chip) | Other Series/Mfr → WDC → W65C22 | Yes |
 | **U3 — AS6C1008** | 128KB SRAM (32-pin) | RAM → 32-pin Static → 628128 | Yes |
 | **U6 — 74AC00** | Quad NAND gate | 74HC CMOS → 7400 (at 3.3V) | Yes |
 | **U7 — 74AC02** | Quad NOR gate | 74HC CMOS → 7402 (at 3.3V) | Yes |
@@ -120,7 +120,7 @@ These are the ICs from the RP6502 board that the Chip Tester Pro V2 can test:
 - **74AC chips**: Use the **74HC CMOS** test category (tests at 3.3V CMOS levels, which matches 74AC operating voltage)
 - **74HC30**: Use the **74HC CMOS** test category → 7430
 - **AS6C1008 (128KB SRAM)**: This is a 32-pin 128K×8 static RAM. Use RAM → 32-pin Static → 628128 (128K×8 equivalent)
-- **W65C02S and W65C22S**: Found under Other → WDC
+- **W65C02S and W65C22S**: Found under Other Series/Mfr → WDC
 - **Pi Pico modules**: Cannot be tested with this tester (they are not DIP ICs)
 
 ---
@@ -136,8 +136,8 @@ These are the ICs from the RP6502 board that the Chip Tester Pro V2 can test:
    - U7 (74AC02) — 74HC CMOS → 7402
    - U8 (74HC30) — 74HC CMOS → 7430
    - U3 (AS6C1008) — RAM → 32-pin Static → 628128
-   - U5 (W65C22S) — Other → WDC → W65C22
-   - U1 (W65C02S) — Other → WDC → W65C02
+   - U5 (W65C22S) — Other Series/Mfr → WDC → W65C22
+   - U1 (W65C02S) — Other Series/Mfr → WDC → W65C02
 4. If any IC fails, try burn-in mode to confirm, then check detailed results
 5. If a chip passes, it has a strong likelihood of being good — but confirm in the real board
 

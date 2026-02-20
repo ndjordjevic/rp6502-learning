@@ -85,62 +85,90 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 **Goal**: Test and inspect the board before inserting expensive ICs to catch any manufacturing defects
 
 **Test all ICs with chip tester** (see [notes/tools/CHIP_TESTER.md](notes/tools/CHIP_TESTER.md)):
-- [ ] U1 — W65C02S (Other → WDC → W65C02)
-- [ ] U3 — AS6C1008 SRAM (RAM → 32-pin Static → 628128)
-- [ ] U5 — W65C22S VIA (Other → WDC → W65C22)
-- [x] U6 — 74AC00 Quad NAND (74HC CMOS → 7400)
-- [ ] U7 — 74AC02 Quad NOR (74HC CMOS → 7402)
-- [ ] U8 — 74HC30 8-input NAND (74HC CMOS → 7430)
+- [x] U1 — W65C02S (40-pin, Other Series/Mfr → WDC → W65C02)
+- [x] U3 — AS6C1008 SRAM (32-pin, RAM → 32-pin Static → 628128)
+- [x] U5 — W65C22S VIA (40-pin, Other Series/Mfr → WDC → W65C22)
+- [x] U6 — 74AC00 Quad NAND (14-pin, 74HC CMOS → 7400)
+- [x] U7 — 74AC02 Quad NOR (14-pin, 74HC CMOS → 7402)
+- [x] U8 — 74HC30 8-input NAND (14-pin, 74HC CMOS → 7430)
 
 **Visual Inspection:**
-- [ ] Check for solder bridges between adjacent pads/pins
-- [ ] Verify all passive components are installed (resistors, capacitors)
-- [ ] Check for cold solder joints (dull, grainy appearance)
-- [ ] Verify component orientation matches silkscreen markings
-- [ ] Check for missing components (compare to BOM)
-- [ ] Inspect IC sockets for proper installation and pin alignment
-- [ ] Verify connectors (VGA, audio, GPIO headers) are properly soldered
-- [ ] Check for any physical damage (cracks, lifted pads, scratches)
+- [x] Check for solder bridges between adjacent pads/pins
+- [x] Verify all passive components are installed (resistors, capacitors)
+- [x] Check for cold solder joints (dull, grainy appearance)
+- [x] Verify component orientation matches silkscreen markings
+- [x] Check for missing components (compare to BOM)
+- [x] Inspect IC sockets for proper installation and pin alignment
+- [x] Verify connectors (VGA, audio, GPIO headers) are properly soldered
+- [x] Check for any physical damage (cracks, lifted pads, scratches)
 
-**Continuity Testing (Multimeter):**
-- [ ] **Power Rails**: Test continuity on +3V3A and +3V3B rails (should be isolated from each other)
-- [ ] **Ground Plane**: Verify all GND connections have continuity
-- [ ] **Socket Power Pins**: Check VCC pins on each IC socket connect to appropriate power rail
-- [ ] **Socket Ground Pins**: Check GND pins on each socket connect to ground
-- [ ] **No Shorts**: Verify no continuity between power rails and ground (with no power applied)
-- [ ] **PIX Bus**: Check continuity on PIX bus connections (PHI2, PIX0-3) between RIA and VGA sockets
-- [ ] **6502 Bus**: Verify address/data bus traces have continuity (check a few representative pins)
+*How to do it (magnifier + microscope):* Use the **magnifier** first for a full-board pass: check that nothing is obviously missing, no big bridges, and connectors/sockets look straight. Then use the **microscope** on high-risk areas: **VGA and audio connector pins** (tight pitch, most likely bridges), **IC socket rows** (especially 40-pin U1/U5 and 32-pin U3), and any joint that looks dull or odd under the magnifier. Good joints are shiny and concave; cold joints are dull/grainy; bridges are blobs between two pins. For **BOM check**, use the assembly BOM (e.g. `picocomputer.github.io` repo → `docs/source/_static/rp6502-reva-assembly/bom.csv`): 10× 0.1µF caps (C1–C9, C11), 2× 47µF (C10, C12), 24 resistors (R1–R24), J1 (2×12), J2 (2×6), J3 VGA, J4 audio, REBOOT button, sockets U1, U3, U5 (40/32/40-pin), U6–U8 (14-pin), U2/U4 (20-pin header sockets). Match silkscreen designators and count; note polarity only where it matters (47µF caps, REBOOT button).
+
+**Continuity Testing (Multimeter) - Essential Checks:**
+- [x] **Power Rails Isolation**: Verify +3V3A and +3V3B rails are isolated from each other (no continuity between them)
+- [x] **No Shorts - +3V3A**: Verify NO continuity between +3V3A and GND (with no power applied) — critical safety check
+- [x] **No Shorts - +3V3B**: Verify NO continuity between +3V3B and GND (with no power applied) — critical safety check
+- [x] **Ground Plane**: Verify all GND connections have continuity (check 2-3 GND points like connector shells, socket GND pins)
+
+*Note: Detailed socket pin mapping and bus continuity checks can be deferred unless troubleshooting issues.*
 
 **Resistance Checks:**
-- [ ] Verify resistor values match BOM (measure a few key ones)
-- [ ] Check decoupling capacitors don't show short circuits
-- [ ] Verify pull-up/pull-down resistors are correct values
+- [x] Verify resistor values match BOM (measure a few key ones):
+  - R1, R6, R11, R18: 8.06 kΩ
+  - R2, R7, R12: 4.02 kΩ
+  - R3, R8, R13: 2 kΩ
+  - R4, R9, R14: 1 kΩ
+  - R5, R10, R15: 499 Ω
+  - R16, R17: 47 Ω
+  - R19, R22: 220 Ω
+  - R20, R23: 100 Ω
+  - R21, R24: 1.8 kΩ
 
+**Capacitance Checks:**
+- [x] Verify capacitor values match BOM (spot-check with capacitance meter):
+  - C1–C9, C11: 0.1 µF (C1: ~570 nF confirms C1+C2+C3+C6+C7+C8; C4: ~190 nF confirms C4+C5; C9/C11: resistance confirms presence)
+  - C10, C12: 47 µF (resistance confirms presence)
+ 
 **Socket Inspection:**
-- [ ] Verify each socket pin makes good contact (gently probe with multimeter)
-- [ ] Check socket orientation matches silkscreen (pin 1 indicators)
-- [ ] Verify socket pin numbering matches expected IC pinout
-- [ ] Test socket pin continuity to PCB traces
+- [x] Check socket orientation matches silkscreen (pin 1 indicators) — verified visually
+- [x] Verify socket pins are straight and properly seated — verified during visual inspection
+
+*Note: Detailed pin-by-pin continuity testing can be deferred unless troubleshooting issues. Factory-soldered boards typically have reliable socket connections.*
 
 **Power Supply Testing (CAUTION - Only if safe):**
-- [ ] **DO NOT** apply power yet if you haven't verified no shorts
-- [ ] If continuity tests pass, consider brief power test with current-limited supply
-- [ ] Check voltage levels on power rails (should be 3.3V)
-- [ ] Verify no excessive current draw (indicates short circuit)
-- [ ] **Stop immediately** if you see smoke, excessive heat, or unexpected voltages
+- [x] **Pre-check**: DO NOT apply power unless you already verified **no shorts** (+3V3A↔GND, +3V3B↔GND, +3V3A↔+3V3B) with the multimeter
+- [x] **Set bench supply** (DPS-150): **3.3 V**, current limit **0.10 A** (100 mA) to start
+- [x] **Power +3V3A rail (brief test)**:
+  - [x] Connect supply **+** to **U1 socket pin 6** (+3V3A connection point)
+  - [x] Connect supply **-** to **U1 socket pin 21** (GND connection point)
+  - [x] Turn on supply and observe:
+    - [x] Voltage on +3V3A is **3.3 V** (measured at U3 pin 32 and C4 GND)
+    - [x] Supply current is **0 mA** (very low, normal for board with only passives — no shorts detected)
+- [x] **Power +3V3B rail (brief test)**:
+  - [x] Connect supply **+** to **C4 rail-side pad** (+3V3B connection point)
+  - [x] Connect supply **-** to **U1 socket pin 21** (GND connection point)
+  - [x] Turn on supply and observe:
+    - [x] Voltage on +3V3B is **3.3 V** (measured at U3 pins 32 and 16)
+    - [x] Supply current is **0 mA** (very low, normal for board with only passives — no shorts detected)
+- [x] **Stop immediately** if you see: current hitting the limit / rapidly rising current, voltage collapsing, smoke/odor, or anything heating up
 
-**Tools Needed:**
-- Digital multimeter (continuity, resistance, voltage modes)
-- Good lighting and magnification (for visual inspection)
-- Anti-static mat and wrist strap (when handling ICs later)
+### 2.2 First Step: VGA Pico and Display Check (Done)
+**What I did first:** Loaded the VGA Pico firmware, installed the VGA Pico in its socket (U4), connected the board's VGA output to the 9.7" portable display via a VGA-to-HDMI adapter, and powered the VGA Pico. A blinking cursor appeared in the top-left corner of the screen, as expected (as shown in the author's video).
 
-**Safety Notes:**
-- Always test with power OFF for continuity/resistance checks
-- Never apply power if you find shorts between power and ground
-- Use current-limited power supply if testing voltages
-- Keep ICs in anti-static bags until ready to install
+**Resources:**
+- Firmware releases: https://github.com/picocomputer/rp6502/releases
+- Documentation: https://picocomputer.github.io/hardware.html#step-5-pi-pico-firmware
 
-### 2.2 Assembly Steps (Pre-Soldered Board)
+**Learning Objectives:**
+- [x] Download latest VGA firmware (.uf2 file)
+- [x] Load VGA firmware on Pico 2 (hold BOOTSEL → connect USB → copy .uf2 to mounted drive → wait for LED)
+- [x] Install Pico 2 (VGA) in U4 socket (note orientation)
+- [x] Connect VGA output to display via VGA-to-HDMI adapter (e.g. 9.7" portable Mini-HDMI display; power adapter from USB if needed)
+- [x] Power the VGA Pico; observe blinking cursor in top-left corner (as in author's video)
+
+*Next steps (assembly of remaining ICs, RIA Pico, RIA firmware, etc.) to be added later.*
+
+### 2.3 Assembly Steps (Pre-Soldered Board) — Next Steps
 **Note**: For pre-soldered boards, passive components and connectors are already installed. Only ICs need to be inserted.
 
 **Learning Objectives:**
@@ -152,29 +180,18 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
   - [ ] U1 - W65C02S (40-pin, note orientation - pin 1 indicator)
   - [ ] U3 - AS6C1008 SRAM (32-pin, note orientation)
   - [ ] U5 - W65C22S VIA (40-pin, note orientation)
-- [ ] **Install Raspberry Pi Pico modules**:
+- [ ] **Install Raspberry Pi Pico modules** (VGA Pico already in U4; RIA remaining):
   - [ ] U2 - Pico 2 W (RIA) - goes in socket (note orientation)
-  - [ ] U4 - Pico 2 (VGA) - goes in socket (note orientation)
 - [ ] Double-check all IC orientations (pin 1 matches socket pin 1)
 - [ ] Verify all ICs are fully seated in sockets
 
-### 2.3 Firmware Installation
-**Resources:**
-- Firmware releases: https://github.com/picocomputer/rp6502/releases
-- Documentation: https://picocomputer.github.io/hardware.html#step-5-pi-pico-firmware
-
+### 2.4 Firmware Installation — Remaining
 **Learning Objectives:**
 - [ ] Download latest RIA firmware (.uf2 file)
-- [ ] Download latest VGA firmware (.uf2 file)
 - [ ] Load RIA firmware:
   - [ ] Hold BOOTSEL button on Pico 2 W
   - [ ] Connect USB to computer
   - [ ] Copy RIA .uf2 file to mounted drive
-  - [ ] Wait for LED to turn on
-- [ ] Load VGA firmware:
-  - [ ] Hold BOOTSEL button on Pico 2
-  - [ ] Connect USB to computer
-  - [ ] Copy VGA .uf2 file to mounted drive
   - [ ] Wait for LED to turn on
 
 ---
