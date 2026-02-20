@@ -80,6 +80,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
   - [x] Logic Probe LP-1 — [notes/tools/LOGIC_PROBE_LP1.md](notes/tools/LOGIC_PROBE_LP1.md)
   - [x] Logic Probe Model 610B — [notes/tools/LOGIC_PROBE_610B.md](notes/tools/LOGIC_PROBE_610B.md)
   - [x] USB Power Meter (Aideepen USB volt-ammeter) — [notes/tools/USB_POWER_METER.md](notes/tools/USB_POWER_METER.md)
+  - [x] Raspberry Pi Debug Probe (SWD + UART for Pico/RP2040) — [notes/tools/RASPBERRY_PI_DEBUG_PROBE.md](notes/tools/RASPBERRY_PI_DEBUG_PROBE.md)
 
 ### 2.1.1 Pre-IC Testing & Inspection (Pre-Soldered Board)
 **Goal**: Test and inspect the board before inserting expensive ICs to catch any manufacturing defects
@@ -224,6 +225,9 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] VGA not working - check PIX bus connections, VGA firmware
 - [ ] Monitor not responding - check reset, try reboot button
 - [ ] USB not working - check USB cable, try different port
+
+**When Pico (RIA/VGA) won’t respond or firmware load fails:**
+- [ ] **Use Raspberry Pi Debug Probe**: Connect the Debug Probe (SWD + UART) to the RIA or VGA Pico’s debug header (if present on the board) to reflash firmware, run OpenOCD, or capture serial output. See [notes/tools/RASPBERRY_PI_DEBUG_PROBE.md](notes/tools/RASPBERRY_PI_DEBUG_PROBE.md). Check schematic/docs for 3-pin debug connector availability and pinout.
 
 **Resources:**
 - Forums: https://github.com/picocomputer/community/discussions
