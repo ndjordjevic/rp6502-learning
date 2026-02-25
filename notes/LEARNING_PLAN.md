@@ -157,8 +157,8 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
     - [✔] Supply current is **0 mA** (very low, normal for board with only passives — no shorts detected)
 - [✔] **Stop immediately** if you see: current hitting the limit / rapidly rising current, voltage collapsing, smoke/odor, or anything heating up
 
-### 2.2 First Step: VGA Pico and Display Check (Done)
-**What I did first:** Loaded the VGA Pico firmware, installed the VGA Pico in its socket (U4), connected the board's VGA output to the 9.7" portable display via a VGA-to-HDMI adapter, and powered the VGA Pico. A blinking cursor appeared in the top-left corner of the screen, as expected (as shown in the author's video).
+### 2.2 First Step: VGA Pico and Display Check
+**Goal:** Load VGA firmware on a Pico 2, install it in the socket (U4), connect the VGA output to the display via a VGA-to-HDMI adapter, and power the VGA Pico. A blinking cursor should appear in the top-left corner of the screen, as expected (as shown in the author's video).
 
 **Resources:**
 - Firmware releases: https://github.com/picocomputer/rp6502/releases
@@ -171,10 +171,23 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [✔] Connect VGA output to display via VGA-to-HDMI adapter (e.g. 9.7" portable Mini-HDMI display; power adapter from USB if needed)
 - [✔] Power the VGA Pico; observe blinking cursor in top-left corner (as in author's video)
 
-*Next steps (assembly of remaining ICs, RIA Pico, RIA firmware, etc.) to be added later.*
+### 2.3 Second Step: RIA Pico, Keyboard, Display, and HELP Check
+**Goal:** Load RIA firmware on a second Pi Pico (standalone), connect a keyboard, power it up, and verify that typing and running the **HELP** command works.
 
-### 2.3 Assembly Steps (Pre-Soldered Board) — Next Steps
-**Note**: For pre-soldered boards, passive components and connectors are already installed. Only ICs need to be inserted.
+**Resources:**
+- Firmware releases: https://github.com/picocomputer/rp6502/releases (RIA .uf2 for Pico 2 W)
+- Documentation: https://picocomputer.github.io/hardware.html#step-5-pi-pico-firmware, https://picocomputer.github.io/ria.html
+
+**Learning Objectives:**
+- [✔] Download latest RIA firmware (.uf2 file) from the releases page
+- [✔] Load RIA firmware on a second Pico 2 W (hold BOOTSEL → connect USB → copy RIA .uf2 to mounted drive → wait for LED)
+- [✔] Connect the RIA Pico to the computer via USB (power + serial console); or power via USB and connect a USB keyboard using a Micro USB to USB-A OTG adapter
+- [✔] Power up the RIA Pico; type **HELP** and press Enter; verify that the HELP command runs and displays help output
+
+*Once this works, the same RIA Pico can later be installed in the board socket (U2); keyboard and serial behavior apply there too (with VGA for display).*
+
+### 2.4 Assembly Steps (Pre-Soldered Board) — Next Steps
+**Goal:** Install the logic chips (U6, U7, U8) in sockets, install the main ICs (U1, U3, U5) in sockets, and double-check all IC orientations.
 
 **Learning Objectives:**
 - [☐] **Install logic chips** (U6, U7, U8) in sockets:
@@ -185,19 +198,8 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
   - [☐] U1 - W65C02S (40-pin, note orientation - pin 1 indicator)
   - [☐] U3 - AS6C1008 SRAM (32-pin, note orientation)
   - [☐] U5 - W65C22S VIA (40-pin, note orientation)
-- [☐] **Install Raspberry Pi Pico modules** (VGA Pico already in U4; RIA remaining):
-  - [☐] U2 - Pico 2 W (RIA) - goes in socket (note orientation)
 - [☐] Double-check all IC orientations (pin 1 matches socket pin 1)
 - [☐] Verify all ICs are fully seated in sockets
-
-### 2.4 Firmware Installation — Remaining
-**Learning Objectives:**
-- [☐] Download latest RIA firmware (.uf2 file)
-- [☐] Load RIA firmware:
-  - [☐] Hold BOOTSEL button on Pico 2 W
-  - [☐] Connect USB to computer
-  - [☐] Copy RIA .uf2 file to mounted drive
-  - [☐] Wait for LED to turn on
 
 ---
 
