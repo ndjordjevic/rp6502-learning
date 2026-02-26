@@ -59,6 +59,7 @@ Use these sources in order. Prefer **local workspace copies** when available.
 ## Workspace navigation
 
 - Workspace projects guide: `/Users/nenaddjordjevic/CProjects/rp6502-learning/notes/WORKSPACE_PROJECTS.md`
+- **Video notes**: `/Users/nenaddjordjevic/CProjects/rp6502-learning/notes/videos/` — notes from the RP6502 (Picocomputer) author’s YouTube videos; use for context on design evolution, PIO/DMA, memory map, and prototype-era hardware.
 
 ## Answering rules (anti-hallucination)
 
