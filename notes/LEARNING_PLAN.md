@@ -190,16 +190,16 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 **Goal:** Install the logic chips (U6, U7, U8) in sockets, install the main ICs (U1, U3, U5) in sockets, and double-check all IC orientations.
 
 **Learning Objectives:**
-- [☐] **Install logic chips** (U6, U7, U8) in sockets:
-  - [☐] U6 - 74AC00 Quad NAND (14-pin, note orientation)
-  - [☐] U7 - 74AC02 Quad NOR (14-pin, note orientation)
-  - [☐] U8 - 74HC30 8-input NAND (14-pin, note orientation)
-- [☐] **Install main ICs** in sockets:
-  - [☐] U1 - W65C02S (40-pin, note orientation - pin 1 indicator)
-  - [☐] U3 - AS6C1008 SRAM (32-pin, note orientation)
-  - [☐] U5 - W65C22S VIA (40-pin, note orientation)
-- [☐] Double-check all IC orientations (pin 1 matches socket pin 1)
-- [☐] Verify all ICs are fully seated in sockets
+- [✔] **Install logic chips** (U6, U7, U8) in sockets:
+  - [✔] U6 - 74AC00 Quad NAND (14-pin, note orientation)
+  - [✔] U7 - 74AC02 Quad NOR (14-pin, note orientation)
+  - [✔] U8 - 74HC30 8-input NAND (14-pin, note orientation)
+- [✔] **Install main ICs** in sockets:
+  - [✔] U1 - W65C02S (40-pin, note orientation - pin 1 indicator)
+  - [✔] U3 - AS6C1008 SRAM (32-pin, note orientation)
+  - [✔] U5 - W65C22S VIA (40-pin, note orientation)
+- [✔] Double-check all IC orientations (pin 1 matches socket pin 1)
+- [✔] Verify all ICs are fully seated in sockets
 
 ---
 
@@ -207,41 +207,32 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 
 **Goal**: Verify the computer works correctly
 
-### 3.1 Initial Power-On Test
+### 3.1 Initial Power-On Test (Done)
+**What I did:** Connected power to the **VGA Pico** via the Pico power switch (CanaKit PiSwitch); connected the **Raspberry Pi keyboard with built-in hub** to the **RIA Pico**; connected the board’s VGA output to the **9.7" portable screen** via the VGA-to-HDMI adapter. Everything works as expected.
+
 **Learning Objectives:**
-- [ ] Connect power to RIA (via USB)
-- [ ] Check LED indicators (RIA and VGA should have LEDs)
-- [ ] Verify no smoke or overheating
-- [ ] Check that both Picos are running (LEDs on)
+- [✔] Connect power (e.g. to VGA Pico via USB and power switch, or to RIA via USB)
+- [✔] Check LED indicators (RIA and VGA should have LEDs)
+- [✔] Verify no smoke or overheating
+- [✔] Check that both Picos are running (LEDs on)
+
+**Quirk (power via switch):** If `status` doesn’t show VGA on cold power-up (screen and keyboard work; one reboot fixes it), see **3.3 Troubleshooting**.
 
 ### 3.2 Basic Functionality Tests
 **Learning Objectives:**
-- [ ] **Console Access**: Connect via one of:
-  - [ ] USB CDC (serial) - if VGA connected
-  - [ ] UART pins on RIA (115200 8N1)
-  - [ ] VGA monitor + USB keyboard
-- [ ] **Monitor Boot**: Should see RP6502 monitor prompt
-- [ ] **VGA Test**: If VGA installed, should see console on monitor
-- [ ] **Keyboard Test**: Type in monitor, should see characters
-- [ ] **Basic Commands**: Try `help` command in monitor
+- [✔] **Console Access**: VGA monitor + USB keyboard (tested for now)
+- [✔] **Monitor Boot**: Should see RP6502 monitor prompt
+- [✔] **VGA Test**: If VGA installed, should see console on monitor
+- [✔] **Keyboard Test**: Type in monitor, should see characters
+- [✔] **Basic Commands**: Try `help` command in monitor
 
 ### 3.3 Troubleshooting
 **Common Issues:**
-- [ ] No console output - check connections, firmware
-- [ ] VGA not working - check PIX bus connections, VGA firmware
-- [ ] Monitor not responding - check reset, try reboot button
-- [ ] USB not working - check USB cable, try different port
-
-**When Pico (RIA/VGA) won’t respond or firmware load fails:**
-- [ ] **Use Raspberry Pi Debug Probe**: Connect the Debug Probe (SWD + UART) to the RIA or VGA Pico’s debug header (if present on the board) to reflash firmware, run OpenOCD, or capture serial output. See [notes/tools/RASPBERRY_PI_DEBUG_PROBE.md](notes/tools/RASPBERRY_PI_DEBUG_PROBE.md). Check schematic/docs for 3-pin debug connector availability and pinout.
-
-**Resources:**
-- Forums: https://github.com/picocomputer/community/discussions
-- Discord: https://discord.gg/TC6X8kTr6d
+- [✔] **`status` doesn’t show VGA when powering with or without the switch** — On cold power-up, `status` omits the VGA Pico even though the screen and keyboard work; one reboot (CTRL-ALT-DEL or power cycle) fixes it. **Cause (author):** Noise on the UART backchannel; he suspects something changed (e.g. power supply or board sourcing). **Fix (v0.17):** In `vga_connect()` in `rp6502/src/ria/sys/vga.c`: `busy_wait_ms(5)`. Build from source: see SETUP_NOTES.md.
 
 ---
 
-## Phase 3.5: Hands-On Exploration (Computer Working)
+## Phase 3.4: Hands-On Exploration (Computer Working)
 
 **Goal**: Once the hardware is fully functional — explore it as a user, run existing programs, set up a development environment, write simple apps, build intuition for how the system works, and explore how to extend the computer with custom hardware (add-on boards or circuits) before diving into firmware internals.
 
@@ -249,7 +240,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 
 > **Why this phase?** Phases 4–8 go deep into firmware and chip internals. But first you should *use* the computer — see what it does, what programs exist, how development works. This builds context that makes the deep dives far more productive. Think of it as "user mode" before "kernel mode."
 
-### 3.5.1 Explore the Monitor
+### 3.4.1 Explore the Monitor
 **Goal**: Get comfortable with the built-in monitor (command shell).
 
 **Tasks:**
@@ -261,7 +252,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] Try `reboot` — observe boot sequence
 - [ ] Try CTRL-ALT-DEL (break) if a program is running
 
-### 3.5.2 Run Existing Programs
+### 3.4.2 Run Existing Programs
 **Goal**: See what the Picocomputer can do out of the box.
 
 **Resources:**
@@ -281,7 +272,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] Load and run **ehBASIC** — type a simple BASIC program (`10 PRINT "HELLO"`, `20 GOTO 10`, `RUN`)
 - [ ] Note what works, what's interesting, what you want to understand deeper
 
-### 3.5.3 Set Up Development Environment
+### 3.4.3 Set Up Development Environment
 **Goal**: Be able to compile and load your own 6502 programs.
 
 **Resources:**
@@ -297,7 +288,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] Load the built program onto the Picocomputer (USB drive or UART upload)
 - [ ] Verify it runs — you've completed the "hello world" of RP6502 development
 
-### 3.5.4 Write Simple Programs
+### 3.4.4 Write Simple Programs
 **Goal**: Get hands-on with 6502 programming on the Picocomputer.
 
 **Tasks:**
@@ -308,7 +299,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] **Simple Graphics** (if VGA): Set a video mode via xreg, draw something to XRAM, see it on screen
 - [ ] **File I/O**: Open a file from USB drive, read contents, print to console
 
-### 3.5.5 Observe and Probe (with tools)
+### 3.4.5 Observe and Probe (with tools)
 **Goal**: Use your test equipment to see what's happening on the real hardware.
 
 **Tasks:**
@@ -318,7 +309,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] **Compare with emulator**: Run the same program in the emulator and on hardware — do the register reads/writes match?
 - [ ] Document observations and any differences between emulator and real hardware
 
-### 3.5.6 Understand the User-Level Architecture
+### 3.4.6 Understand the User-Level Architecture
 **Goal**: Build a mental model of how the system works from a programmer's perspective.
 
 **Tasks:**
@@ -329,7 +320,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] Understand file I/O from a user's perspective: filenames on XSTACK, OS calls for open/read/write/close
 - [ ] Review the example programs' source code and trace the logic
 
-### 3.5.7 Explore Hardware Extension Possibilities
+### 3.4.7 Explore Hardware Extension Possibilities
 **Goal**: Understand how the Picocomputer can be extended with custom hardware so you can eventually design and build your own add-ons.
 
 **Why here?** Once the computer works, it's natural to ask "what can I add?" — a second goal of this learning journey is to explore creating hardware extensions (add-on boards or circuits) that extend the computer's capabilities.
@@ -344,6 +335,19 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [ ] Optional: Browse the community (forums, Discord) for others' hardware extension projects
 
 **Later (Phase 8.4):** Design and build a real hardware extension — schematic, PCB or breadboard, 6502 driver code.
+
+### 3.5 Other Console Access Options
+**Goal**: Try the other ways to get a console besides VGA + USB keyboard.
+
+**Tasks:**
+- [ ] **USB CDC (serial)** — if VGA is connected, connect the RIA Pico to the computer via USB and use a serial terminal (e.g. minicom, PuTTY) at the correct port and baud rate to get a second console or to access the monitor without a display
+- [ ] **UART pins on RIA** — use the RIA’s UART pins (115200 8N1) with a USB–serial adapter or similar to get console access (see hardware docs for pinout)
+
+### 3.6 Learning and Exploring Debug Probe
+**Goal**: Learn to use the Raspberry Pi Debug Probe when the Pico (RIA or VGA) won’t respond or firmware load fails.
+
+**Tasks:**
+- [ ] **Use Raspberry Pi Debug Probe** — Connect the Debug Probe (SWD + UART) to the RIA or VGA Pico’s debug header (if present on the board) to reflash firmware, run OpenOCD, or capture serial output. See [notes/tools/RASPBERRY_PI_DEBUG_PROBE.md](notes/tools/RASPBERRY_PI_DEBUG_PROBE.md). Check schematic/docs for 3-pin debug connector availability and pinout.
 
 ---
 
@@ -691,7 +695,7 @@ examples/src/rtc.c        - Real-time clock
 3. Test basic commands
 4. Troubleshoot any issues
 
-### Phase 3.5: Hands-On Exploration (1-2 weeks, once hardware is working)
+### Phase 3.4: Hands-On Exploration (1-2 weeks, once hardware is working)
 1. Explore the monitor — learn all commands
 2. Run existing programs and ehBASIC
 3. Set up dev environment (CC65 or LLVM-MOS)
@@ -816,7 +820,7 @@ examples/src/rtc.c        - Real-time clock
    - Access the monitor/console
    - Test basic functionality
    
-5. **Phase 3.5** - Hands-on exploration (once hardware works)
+5. **Phase 3.4** - Hands-on exploration (once hardware works)
    - Explore the monitor, run existing programs, set up dev environment
    - Write simple programs, probe with tools
    - Build user-level mental model before diving into firmware
