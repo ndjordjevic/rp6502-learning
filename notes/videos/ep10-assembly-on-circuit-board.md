@@ -83,8 +83,11 @@
 ## Program from disk (USB, no SD)
 
 - **No SD card slot** — storage is **USB**.
-- **`status`** shows a drive mounted; list files.
-- **`LOAD ADVENT4`** — runs. (Program was written on a minicomputer, ported to microcomputers, now running on a Picocomputer.)
+- **USB filesystem:** Format the USB drive as **FAT32** (or FAT12/FAT16 on very small volumes). The RIA uses the FatFs library (`rp6502/src/fatfs`, `src/ria/usb/msc.c`); the default firmware build supports standard FAT only (exFAT is disabled, `RP6502_EXFAT=0` in `src/CMakeLists.txt`).
+- **`status`** — confirms USB: e.g. "2 devices" (HID keyboard and mouse, plus MSC "USB Disk" with size, e.g. 120 MB). Also shows PHI2 (e.g. 8000 kHz), VGA resolution (e.g. 1280×1024), RIA frequency.
+- **`ls`** — lists files on the USB drive: e.g. `advent4` (~47 KB), `advent4.txt`, and other advent*.txt; you may see `<DIR> System Volume Information` on Windows-formatted FAT32 drives.
+- **`load advent4`** — loads and runs the game. (Program was written on a minicomputer, ported to microcomputers, now running on a Picocomputer.)
+- **Where to get advent4:** Source and build from **[picocomputer/adventure](https://github.com/picocomputer/adventure)** (Colossal Cave Adventure for RP6502). Build with CMake and cc65; copy the built `advent4` (and optional `advent4.txt` etc.) onto your FAT32 USB drive.
 
 ## Links and community
 

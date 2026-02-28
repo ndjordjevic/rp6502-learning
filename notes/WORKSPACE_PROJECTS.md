@@ -61,8 +61,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 **Key Contents**:
 - `docs/source/` - Sphinx/RST source files (index.rst, hardware.rst, ria.rst, ria_w.rst, vga.rst, os.rst)
-- `docs/source/_static/` - Static assets (schematic PDF, gerbers, BOM CSVs, assembly zip)
-- `2023-06-07-rp6502.pdf` - Schematic PDF
+- `docs/source/_static/` - Static assets (schematic PDF, gerbers, BOM CSVs, assembly zip; Rev B uses `2026-01-26-rp6502.pdf`)
 
 **Use For**: Reading documentation source, offline access to RP6502 docs, contributing to documentation, accessing schematic PDF and BOM files locally
 
@@ -114,9 +113,24 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
+### 8. **adventure** - Colossal Cave Adventure
+**Path**: `/Users/nenaddjordjevic/CProjects/adventure/`
+
+**Purpose**: Classic Colossal Cave Adventure (Will Crowther / Don Woods) ported to RP6502
+
+**Key Contents**:
+- `src/` - Game source
+- `tools/` - Build/development tools
+- CMake build; produces `advent4` binary (and optional `advent4.txt` etc.) for loading from USB
+- The `.txt` files (`advent1.txt`–`advent4.txt`) are **game data** (cave descriptions, vocabulary, objects). The `advent4` binary loads `advent4.txt` at runtime; the others are alternate datasets from the classic Adventure family.
+
+**Use For**: Running a full game from USB (`load advent4` in monitor), building from source with cc65/CMake; see notes/videos/ep10-assembly-on-circuit-board.md (program from disk)
+
+---
+
 ## Compiler & SDK Projects
 
-### 8. **llvm-mos-sdk** - LLVM-MOS SDK
+### 9. **llvm-mos-sdk** - LLVM-MOS SDK
 **Path**: `/Users/nenaddjordjevic/CProjects/llvm-mos-sdk/`
 
 **Purpose**: LLVM-based compiler toolchain and platform libraries for 6502 systems
@@ -131,7 +145,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 9. **cc65** - CC65 Compiler and Libraries
+### 10. **cc65** - CC65 Compiler and Libraries
 **Path**: `/Users/nenaddjordjevic/CProjects/cc65/`
 
 **Purpose**: C and assembly cross-compiler and runtime library for 6502/65C02 systems
@@ -150,7 +164,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ## Raspberry Pi Pico Reference Projects
 
-### 10. **pico-sdk** - Official Pico SDK
+### 11. **pico-sdk** - Official Pico SDK
 **Path**: `/Users/nenaddjordjevic/CProjects/pico-sdk/`
 
 **Purpose**: Official Raspberry Pi Pico SDK - C/C++ libraries and APIs for RP2040
@@ -165,7 +179,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 11. **pico-examples** - Official Pico Examples
+### 12. **pico-examples** - Official Pico Examples
 **Path**: `/Users/nenaddjordjevic/CProjects/pico-examples/`
 
 **Purpose**: Official example programs for Raspberry Pi Pico
@@ -181,7 +195,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 12. **pico-extras** - Additional Pico Libraries
+### 13. **pico-extras** - Additional Pico Libraries
 **Path**: `/Users/nenaddjordjevic/CProjects/pico-extras/`
 
 **Purpose**: Additional libraries not yet in the main SDK
@@ -196,7 +210,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 13. **Hunter-Adams-RP2040-Demos** - Educational Demos
+### 14. **Hunter-Adams-RP2040-Demos** - Educational Demos
 **Path**: `/Users/nenaddjordjevic/CProjects/Hunter-Adams-RP2040-Demos/`
 
 **Purpose**: Collection of RP2040 examples from Cornell ECE4760 course
@@ -213,7 +227,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ---
 
-### 14. **documentation** - Raspberry Pi Documentation
+### 15. **documentation** - Raspberry Pi Documentation
 **Path**: `/Users/nenaddjordjevic/CProjects/documentation/`
 
 **Purpose**: Source for Raspberry Pi official documentation website
@@ -231,6 +245,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 
 ### Phase 3: Testing
 - **examples/** - Try example programs
+- **adventure/** - Build and run Colossal Cave from USB (`load advent4`)
 - **ehbasic/** - Experiment with BASIC
 
 ### Phase 4-5: Deep Dive
@@ -256,6 +271,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 |---------|------------|---------------|
 | **rp6502** | Firmware source | Phase 4-5, 8 |
 | **examples** | Learning to program | Phase 3, 6-7 |
+| **adventure** | Colossal Cave (load from USB) | Phase 3 |
 | **picocomputer.github.io** | RP6502 docs source | Phase 1-2 |
 | **schematic** | Hardware understanding | Phase 1-2 |
 | **vscode-cc65** | Development setup | Phase 6-7 |
@@ -266,6 +282,7 @@ This document briefly describes each project in the RP6502 workspace and their p
 | **pico-sdk** | Pico API reference | Phase 4-5 |
 | **pico-examples** | Pico learning | Phase 4-5 |
 | **pico-extras** | Video/audio | Phase 5 |
+| **documentation** | Raspberry Pi docs source | Reference |
 | **Hunter-Adams** | Advanced techniques | Phase 8 |
 
 ---

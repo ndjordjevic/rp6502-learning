@@ -11,10 +11,11 @@ Official Raspberry Pi keyboard with built-in USB hub. Planned for use with the R
 
 ## Features
 
-- 79-key keyboard (78-key US, 83-key JP)
+- 79-key keyboard (78-key US, 83-key JP) — **no separate numeric keypad**; right-hand letter keys (U, J, N, etc.) act as an embedded numpad when Num Lock is on.
 - **Built-in USB hub:** 3× USB 2.0 type A ports (mouse, flash drive, etc.)
 - Num Lock, Scroll Lock, Caps Lock with LEDs
 - Automatic keyboard language detection
+- **Num Lock behavior:** Same on any host (RP6502, Raspberry Pi, PC): when Num Lock is on, the right-side letter keys produce numbers (e.g. U→4, J→1, M→0). Turn Num Lock off for normal letter typing.
 - Designed to connect to a USB **host** (e.g. Raspberry Pi, or RP6502 RIA); not OTG on the keyboard side — the **hub** is what needs the OTG adapter on the host side
 
 ## Connection to RP6502

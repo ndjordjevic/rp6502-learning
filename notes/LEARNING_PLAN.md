@@ -13,24 +13,7 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 
 **Goal**: Get familiar with the workspace structure and understand what each project contains
 
-**Resources:**
-- Detailed guide: `notes/WORKSPACE_PROJECTS.md`
-
-**Workspace Projects Checklist:**
-- [✔] **rp6502/** - Main firmware source code (RIA and VGA)
-- [✔] **examples/** - Example 6502 programs to learn from
-- [✔] **schematic/** - Hardware design files (KiCad)
-- [✔] **picocomputer.github.io/** - Official RP6502 documentation source
-- [✔] **vscode-cc65/** - CC65 development template
-- [✔] **vscode-llvm-mos/** - LLVM-MOS development template
-- [✔] **ehbasic/** - Enhanced 6502 BASIC interpreter
-- [✔] **llvm-mos-sdk/** - LLVM-MOS compiler and SDK
-- [✔] **cc65/** - CC65 C/assembly compiler and libraries
-- [✔] **pico-sdk/** - Official Raspberry Pi Pico SDK
-- [✔] **pico-examples/** - Official Pico example programs
-- [✔] **pico-extras/** - Additional Pico libraries (scanvideo, audio)
-- [✔] **Hunter-Adams-RP2040-Demos/** - Educational Pico demos
-- [✔] **documentation/** - Raspberry Pi documentation source
+**Workspace projects:** See [WORKSPACE_PROJECTS.md](notes/WORKSPACE_PROJECTS.md) for the full list, descriptions, and when to use each project.
 
 ---
 
@@ -225,10 +208,19 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [✔] **VGA Test**: If VGA installed, should see console on monitor
 - [✔] **Keyboard Test**: Type in monitor, should see characters
 - [✔] **Basic Commands**: Try `help` command in monitor
+- [✔] **RAM read/write**: In the monitor, read memory at an address (e.g. type address to view contents) and write to RAM (address + data); verify no timeout or verify errors
+- [✔] **6502 clock speed**: First check current speed with **SET PHI2** (no argument) — should show e.g. `PHI2: 8000 (kHz)` (8 MHz default). Then run **SET PHI2 8000** to set 8 MHz; value is saved to RIA EEPROM.
+- [✔] **LOAD ADVENT4**: FAT32 USB plugged in → `status` shows drive, `ls` lists files. Copy release `advent.rp6502` to USB, then **`load advent.rp6502`** (or rename to `advent4` and **`load advent4`**). See notes/videos/ep10-assembly-on-circuit-board.md.
 
 ### 3.3 Troubleshooting
 **Common Issues:**
 - [✔] **`status` doesn’t show VGA when powering with or without the switch** — On cold power-up, `status` omits the VGA Pico even though the screen and keyboard work; one reboot (CTRL-ALT-DEL or power cycle) fixes it. **Cause (author):** Noise on the UART backchannel; he suspects something changed (e.g. power supply or board sourcing). **Fix (v0.17):** In `vga_connect()` in `rp6502/src/ria/sys/vga.c`: `busy_wait_ms(5)`. Build from source: see SETUP_NOTES.md.
+- [✔] **Test firmware v0.18** — v0.18 fixes the VGA cold-boot issue. Flash official RIA (and VGA if needed) v0.18 .uf2 from [releases](https://github.com/picocomputer/rp6502/releases); verify `status` shows VGA on cold power-up.
+- **Num Lock on at boot (v0.18 regression):** After cold start or reboot with v0.18, Num Lock is on by default. On keyboards **without a separate numeric keypad** (many compact/laptop boards), Num Lock makes the right-hand letter keys act as an embedded numpad (U→4, I→5, O→6, J→1, K→2, L→3, M→0, etc.), so typing letters there produces numbers. **Workaround:** Turn Num Lock off (press Num Lock once if your keyboard has that key); keyboard then types letters normally. **Cause (from v0.17→v0.18 diff):** In `rp6502/src/ria/hid/kbd.c`, `kbd_init()` sets `kbd_hid_leds = KBD_LED_NUMLOCK` and calls `kbd_send_leds()`, so the RIA tells the keyboard to turn Num Lock on. In v0.17 a typo (`kdb_hid_leds` vs `kbd_hid_leds`) was fixed in v0.18; combined with the VGA cold-boot fix, the keyboard is enumerated and receives the LED request reliably in v0.18, so the “Num Lock on” default is actually applied. In v0.17 the LED request may have run before the keyboard was connected, so the keyboard kept its power-on default (often Num Lock off). **Upstream fix idea:** Initialize with `kbd_hid_leds = 0` in `kbd_init()` so no LEDs are forced at boot (user can press Num Lock if desired). Consider reporting to picocomputer/rp6502.
+
+**Making it configurable (like CPU frequency):** The same pattern as `SET PHI2` would work. Config is a text file in RIA flash (LFS) with lines like `+P8000` (PHI2). You’d add: (1) a config key e.g. `+N` for “Num Lock at boot” (0 = off, 1 = on); (2) in `kbd.c`: `kbd_get_init_leds()`, `kbd_set_init_leds()`, `kbd_load_init_leds()`, and in `kbd_init()` use that instead of hardcoding `KBD_LED_NUMLOCK`; (3) in `cfg.c`: load/save the `+N` line; (4) in `mon/set.c`: a `SET NUMLOCK 0` / `SET NUMLOCK 1` handler that calls the setter and `cfg_save()`; (5) strings in `str_en.inc`. Roughly 6–8 small edits across 5–6 files — moderate, straightforward follow‑up if you or upstream want it.
+
+> **Next after assembly (once it’s working):** Phase 3.4 — explore the computer from the **user side** (monitor, then **examples** and **ehBASIC**, then dev environment). See 3.4.2 for which projects to run.
 
 ---
 
@@ -236,7 +228,10 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 
 **Goal**: Once the hardware is fully functional — explore it as a user, run existing programs, set up a development environment, write simple apps, build intuition for how the system works, and explore how to extend the computer with custom hardware (add-on boards or circuits) before diving into firmware internals.
 
-**Prerequisite**: All ICs installed, RIA + VGA firmware loaded, console access working (USB-C adapter arrived, monitor prompt visible).
+**Projects to check (user-side exploration):**
+- **examples/** — 6502 example programs: text/console (hello, echo), graphics (mode1, mode2, mode3), input (gamepad), audio (furelise, ezpsg), and more. Build to get .rp6502 files or use pre-built from releases.
+- **ehbasic/** — Enhanced BASIC interpreter. Load the .rp6502 on USB and run it; type BASIC (e.g. `10 PRINT "HELLO"`, `20 GOTO 10`, `RUN`).
+- **Pre-built .rp6502** — https://github.com/picocomputer/rp6502/releases (no build required; copy to USB and load).
 
 > **Why this phase?** Phases 4–8 go deep into firmware and chip internals. But first you should *use* the computer — see what it does, what programs exist, how development works. This builds context that makes the deep dives far more productive. Think of it as "user mode" before "kernel mode."
 
@@ -672,7 +667,7 @@ examples/src/rtc.c        - Real-time clock
 ## Recommended Learning Path
 
 ### Phase 0: Understanding Workspace Projects (30 minutes - 1 hour)
-1. Read `notes/WORKSPACE_PROJECTS.md` to understand all 12 projects
+1. Read `notes/WORKSPACE_PROJECTS.md` to understand all 15 projects
 2. Identify which projects are core RP6502 vs reference materials
 3. Understand when to use each project during learning
 4. Familiarize yourself with project locations and purposes
