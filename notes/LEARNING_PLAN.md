@@ -213,16 +213,19 @@ The RP6502 (Picocomputer 6502) is a modern single-board computer built around th
 - [✔] **LOAD ADVENT4**: FAT32 USB plugged in → `status` shows drive, `ls` lists files. Copy release `advent.rp6502` to USB, then **`load advent.rp6502`** (or rename to `advent4` and **`load advent4`**). See notes/videos/ep10-assembly-on-circuit-board.md.
 
 ### 3.3 Troubleshooting
-**Common Issues:**
-- [✔] **`status` doesn’t show VGA when powering with or without the switch** — On cold power-up, `status` omits the VGA Pico even though the screen and keyboard work; one reboot (CTRL-ALT-DEL or power cycle) fixes it. **Cause (author):** Noise on the UART backchannel; he suspects something changed (e.g. power supply or board sourcing). **Fix (v0.17):** In `vga_connect()` in `rp6502/src/ria/sys/vga.c`: `busy_wait_ms(5)`. Build from source: see SETUP_NOTES.md.
-- [✔] **Test firmware v0.18** — v0.18 fixes the VGA cold-boot issue. Flash official RIA (and VGA if needed) v0.18 .uf2 from [releases](https://github.com/picocomputer/rp6502/releases); verify `status` shows VGA on cold power-up.
-- **Num Lock on at boot (v0.18 regression):** After cold start or reboot with v0.18, Num Lock is on by default. On keyboards **without a separate numeric keypad** (many compact/laptop boards), Num Lock makes the right-hand letter keys act as an embedded numpad (U→4, I→5, O→6, J→1, K→2, L→3, M→0, etc.), so typing letters there produces numbers. **Workaround:** Turn Num Lock off (press Num Lock once if your keyboard has that key); keyboard then types letters normally. **Cause (from v0.17→v0.18 diff):** In `rp6502/src/ria/hid/kbd.c`, `kbd_init()` sets `kbd_hid_leds = KBD_LED_NUMLOCK` and calls `kbd_send_leds()`, so the RIA tells the keyboard to turn Num Lock on. In v0.17 a typo (`kdb_hid_leds` vs `kbd_hid_leds`) was fixed in v0.18; combined with the VGA cold-boot fix, the keyboard is enumerated and receives the LED request reliably in v0.18, so the “Num Lock on” default is actually applied. In v0.17 the LED request may have run before the keyboard was connected, so the keyboard kept its power-on default (often Num Lock off). **Upstream fix idea:** Initialize with `kbd_hid_leds = 0` in `kbd_init()` so no LEDs are forced at boot (user can press Num Lock if desired). Consider reporting to picocomputer/rp6502.
 
-**Making it configurable (like CPU frequency):** The same pattern as `SET PHI2` would work. Config is a text file in RIA flash (LFS) with lines like `+P8000` (PHI2). You’d add: (1) a config key e.g. `+N` for “Num Lock at boot” (0 = off, 1 = on); (2) in `kbd.c`: `kbd_get_init_leds()`, `kbd_set_init_leds()`, `kbd_load_init_leds()`, and in `kbd_init()` use that instead of hardcoding `KBD_LED_NUMLOCK`; (3) in `cfg.c`: load/save the `+N` line; (4) in `mon/set.c`: a `SET NUMLOCK 0` / `SET NUMLOCK 1` handler that calls the setter and `cfg_save()`; (5) strings in `str_en.inc`. Roughly 6–8 small edits across 5–6 files — moderate, straightforward follow‑up if you or upstream want it.
+**Issue: `status` doesn't show VGA on cold power-up**
+On cold boot, `status` omits the VGA Pico even though the screen and keyboard work; one reboot (CTRL-ALT-DEL or power cycle) fixes it.
+**Cause:** Noise on the UART backchannel (author suspects power supply or board sourcing).
+**Solution:** [✔] Fixed in v0.17 — add `busy_wait_ms(5)` in `vga_connect()` in `rp6502/src/ria/sys/vga.c`. Build from source: see SETUP_NOTES.md. [✔] Flash official v0.18 .uf2 from [releases](https://github.com/picocomputer/rp6502/releases) (RIA and VGA) and verify `status` shows VGA on cold power-up.
 
-> **Next after assembly (once it’s working):** Phase 3.4 — explore the computer from the **user side** (monitor, then **examples** and **ehBASIC**, then dev environment). See 3.4.2 for which projects to run.
+- [✔] **Update VGA Pico firmware to v0.18** — RIA already on v0.18; flash the **VGA** Pico with v0.18 .uf2 so both are in sync (com.c fix, term, modes, USB CDC).
 
 ---
+
+**Issue: Num Lock on at boot (v0.18)** — On keyboards without a separate numpad (e.g. RPi Keyboard and Hub), letters type as numbers until you press Num Lock. **Workaround:** Press Num Lock once. **Fix:** PID/VID exception in firmware (RPi keyboard only). See [NUM_LOCK_RPI_KEYBOARD.md](peripherals/NUM_LOCK_RPI_KEYBOARD.md) for full research, cause, VID/PID (04d9:0006), and implementation.
+
+- [✔] **Implement PID/VID exception for Num Lock** — [NUM_LOCK_RPI_KEYBOARD.md](peripherals/NUM_LOCK_RPI_KEYBOARD.md).
 
 ## Phase 3.4: Hands-On Exploration (Computer Working)
 
