@@ -269,12 +269,12 @@ With argument — changes directory.
 ```
 ]0:
 ]1:
-]USB0:
-]USB3:
+]MSC0:
+]MSC3:
 ]9:
 ```
 
-Changes the active USB mass storage device. Up to 10 drives are supported (0–9). The help output shows them as `MSC0:`–`MSC9:`; at the prompt you can use `0:`–`9:` or `USB0:`–`USB9:` (same thing). Use `STATUS` to see which drives are mounted.
+Changes the active USB mass storage device. Up to 10 drives are supported (0–9). **`STATUS`** labels them **`MSC0:`**–**`MSC9:`** (FatFs volume names). At the prompt use **`0:`**–**`9:`** (short form) or **`MSC0:`**–**`MSC9:`** — the same drives. **Not** `USB0:` / `usb0` (unknown / invalid).
 
 **Code:** `mon/fil.c` → `fil_mon_chdrive()`
 

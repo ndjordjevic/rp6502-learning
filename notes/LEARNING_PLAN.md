@@ -245,52 +245,45 @@ On cold boot, `status` omits the VGA Pico even though the screen and keyboard wo
 **HELP — analyze and test**
 - [✔] `help` (or `h` or `?`) — read full command list and installed ROMs; note format matches MONITOR.md.
 - [✔] `help system` — read tutorial (memory, RESB, CTRL-ALT-DEL, hex address examples).
-- [ ] `help about` / `help credits` — copyright and VIP list.
-- [ ] For each command below, run `help <command>` (or `help set <attr>` for SET) and compare to MONITOR.md; then run the command as in the test.
+- [✔] `help about` / `help credits` — copyright and VIP list.
+- [✔] For each command below, run `help <command>` (or `help set <attr>` for SET) and compare to MONITOR.md; then run the command as in the test. (**`BINARY`**: optional host serial test is in **§4.3** — needs a PC/script, not VGA keyboard alone.)
 
 **STATUS**
-- [ ] Analyze: `help status`. Test: `status` — note PHI2, firmware version, VGA line, USB device counts, MSC drives.
+- [✔] Analyze: `help status` (one sentence in firmware — only says STATUS lists RIA hardware). Test: `status` — note RIA firmware line, VGA line, WiFi/NTP/time (Pico W), BLE/USB lines, MSC drives; PHI2 is **not** on `status` (see **SET** / `set` / `help set phi2`).
 
 **SET — analyze and test each attribute**
-- [ ] Analyze: `help set` then `help set phi2`. Test: `set`, `set phi2`, `set phi2 4000` (or 1000); confirm value and that it persists (e.g. reboot).
-- [ ] Analyze: `help set boot`. Test: `set boot`, `set boot -`, `set boot <rom>` if you have an installed ROM.
-- [ ] Analyze: `help set tz`. Test: `set tz`, `set tz <city>` (e.g. `LOS_ANGELES`).
-- [ ] Analyze: `help set kb`. Test: `set kb`, `set kb US`; list layouts from help.
-- [ ] Analyze: `help set cp`. Test: `set cp`, `set cp 437`.
-- [ ] Analyze: `help set vga`. Test: `set vga`, `set vga 0` (or 1/2 if supported).
-- [ ] (Pico W only) Analyze: `help set rf`, `help set rfcc`, `help set ssid`, `help set pass`, `help set ble`. Test each if applicable.
+- [✔] Analyze: `help set` then `help set phi2`. Test: `set`, `set phi2`, `set phi2 4000` (or 1000); confirm value and that it persists (e.g. reboot).
+- [✔] Analyze: `help set boot`. Test: `set boot`, `set boot -`, `set boot <rom>` if you have an installed ROM.
+- [✔] Analyze: `help set tz`. Test: `set tz`, `set tz <city>` (e.g. `LOS_ANGELES`).
+- [✔] Analyze: `help set kb`. Test: `set kb`, `set kb US`; list layouts from help.
+- [✔] Analyze: `help set cp`. Test: `set cp`, `set cp 437`.
+- [✔] Analyze: `help set vga`. Test: `set vga`, `set vga 0` (or 1/2 if supported).
+- [✔] (Pico W only) Analyze: `help set rf`, `help set rfcc`, `help set ssid`, `help set pass`, `help set ble`. Test each if applicable.
 
 **Memory (address commands)**
-- [ ] Analyze: `help 0000` or `help 0:` for memory/drive help. Test read: `0200` — 16 bytes hex dump.
-- [ ] Test range: `0200-020F` or `10000-1000F` (XRAM); observe `--More--` if multiple lines.
-- [ ] Test write: `0200 A9 01 85 00 60` then read `0200` to verify.
-- [ ] Test reset vector: `fffc 00 02` (lo/hi of $0200); optional Intel HEX: `]:02FFFC00000201`.
-
-**BINARY**
-- [ ] Analyze: `help binary`. Test only if you have a host tool that sends binary (e.g. dev workflow); otherwise note: `binary addr len crc` then raw bytes, max 1024, CRC-32.
+- [✔] Analyze: `help 0000` or `help 0:` for memory/drive help. Test read: `0200` — 16 bytes hex dump.
+- [✔] Test range: `0200-020F` or `10000-1000F` (XRAM); observe `--More--` if multiple lines.
+- [✔] Test write: `0200 A9 01 85 00 60` then read `0200` to verify.
+- [✔] Test reset vector: `fffc 00 02` (lo/hi of $0200); optional Intel HEX: `]:02FFFC00000201`.
 
 **Filesystem (LS, CD, drive, MKDIR, UNLINK)**
-- [ ] Analyze: `help dir`. Test: `ls`, `ls <subdir>`, `dir`; note `<DIR>` and file sizes.
-- [ ] Test: `cd`, `cd <dir>`, `cd ..`; `0:` … `7:` (or `USB0:` … `USB7:`) — change drive, then `ls`.
-- [ ] Analyze: `help mkdir`. Test: `mkdir testdir`, then `ls`; `unlink testdir` (empty dir).
-- [ ] Analyze: `help unlink`. Test: create a file (e.g. by UPLOAD or copy on USB), then `unlink <file>`.
+- [✔] Analyze: `help dir`. Test: `ls`, `ls <subdir>`, `dir`; note `<DIR>` and file sizes.
+- [✔] Test: `cd`, `cd <dir>`, `cd ..`; `0:` … `9:` (or `MSC0:` … `MSC9:` — same as **STATUS** labels) — change drive, then `ls`.
+- [✔] Analyze: `help mkdir`. Test: `mkdir testdir`, then `ls`; `unlink testdir` — **removes the directory only if it is empty** (otherwise delete contents first or you get an error).
+- [✔] Analyze: `help unlink`. Test: create a file (e.g. by UPLOAD or copy on USB), then `unlink <file>`.
 
 **ROM (LOAD, INFO, INSTALL, romname, REMOVE)**
-- [ ] Analyze: `help load`. Test: put a .rp6502 on USB, `load <file>`; if file has reset vector, 6502 starts.
-- [ ] Analyze: `help install`. Test: `info <file>` (shows `#` lines), then `install <file>`; `help` should list the ROM.
-- [ ] Test: run installed ROM by name (e.g. `ehbasic` or `EHBASIC`); confirm it starts.
-- [ ] Analyze: `help` (REMOVE in command list). Test: `remove <romname>`; confirm it disappears from `help`.
+- [✔] Analyze: `help load`. Test: put a .rp6502 on USB, `load <file>`; if file has reset vector, 6502 starts.
+- [✔] Analyze: `help install`. Test: `info <file>` (shows `#` lines), then `install <file>`; `help` should list the ROM.
+- [✔] Test: run installed ROM by name (e.g. `ehbasic` or `EHBASIC`); confirm it starts.
+- [✔] Analyze: `help` (REMOVE in command list). Test: `remove <romname>`; confirm it disappears from `help`.
 
-**REBOOT and RESET**
-- [ ] Analyze: `help reboot`, `help reset`. Test: `reset` — 6502 runs from $FFFC; press CTRL-ALT-DEL to return to `]`.
-- [ ] Test: `reboot` — observe full RIA boot; if SET BOOT is set, boot ROM loads.
-
-**UPLOAD**
-- [ ] Analyze: `help upload`. Test: `upload test.bin`; at `}` send a small chunk (e.g. length + CRC + bytes), then `END` or blank line; verify file with `ls` / `unlink`.
+**REBOOT**
+- [✔] Analyze: `help reboot`. Test: `reboot` — observe full RIA boot; if SET BOOT is set, boot ROM loads. (For **`reset`** — start 6502 at current `$FFFC` without rebooting the RIA — see **§4.3**.)
 
 **Break and pager**
-- [ ] Run a program (e.g. load a ROM that runs). Press **CTRL-ALT-DEL** — confirm return to `]`.
-- [ ] Trigger `--More--` (e.g. `help` or `status` on a tall display); press space to continue, then `q` to abort mid-output.
+- [✔] Run a program (e.g. load a ROM that runs). Press **CTRL-ALT-DEL** — confirm return to `]`.
+- [✔] Trigger `--More--` (e.g. `help` or `status` on a tall display); press space to continue, then `q` to abort mid-output.
 
 ### 4.2 Three Ways to Access the Monitor (Serial Options) and User-Level View
 **Goal**: Use the monitor via serial when you don't have VGA (or as a second console), try all console options besides VGA + USB keyboard, and build a mental model of how the system works from a user's perspective.
@@ -313,24 +306,53 @@ On cold boot, `status` omits the VGA Pico even though the screen and keyboard wo
 - [ ] Review example programs' source and trace the logic.
 
 ### 4.3 Running Existing Programs from Various Sources
-**Goal**: See what the Picocomputer can do out of the box.
 
-**Resources:**
-- Example programs: `/Users/nenaddjordjevic/CProjects/examples/`
-- ehBASIC: `/Users/nenaddjordjevic/CProjects/ehbasic/`
-- Pre-built .rp6502 files from releases: https://github.com/picocomputer/rp6502/releases
+**Goal:** Run real software from a **USB stick** first (the normal workflow), then—if you want more—learn **`reset`** (6502 only, RAM already filled) and optional **host → machine** paths over **serial** (**`UPLOAD`** adds files to USB; **`BINARY`** writes RAM directly).
 
-**Tasks:**
-- [ ] Copy example .rp6502 files to a USB drive (FAT32 formatted)
-- [ ] Plug USB drive into the Picocomputer's USB-A port
-- [ ] Use `ls` in monitor to see files
-- [ ] `load` and run each example, observe behavior:
-  - [ ] Text/console examples (hello world, echo)
-  - [ ] Graphics examples (mode1, mode2, mode3 — character, tile, bitmap)
-  - [ ] Input examples (keyboard, gamepad)
-  - [ ] Audio examples (if available)
-- [ ] Load and run **ehBASIC** — type a simple BASIC program (`10 PRINT "HELLO"`, `20 GOTO 10`, `RUN`)
-- [ ] Note what works, what's interesting, what you want to understand deeper
+**Prerequisites:** Monitor basics (§4.1). Steps under **C** need a **PC serial session** (RIA or VGA USB CDC, or RIA UART) as in §4.2, not VGA keyboard alone.
+
+**Where to get `.rp6502` builds**
+- Examples (build locally): `/Users/nenaddjordjevic/CProjects/examples/`
+- EhBASIC: `/Users/nenaddjordjevic/CProjects/ehbasic/`
+- Pre-built (no build): https://github.com/picocomputer/rp6502/releases
+
+---
+
+**A. USB mass storage (start here)**
+
+1. [ ] Copy `.rp6502` files to a **FAT32** USB stick (releases or your own builds).
+2. [ ] Plug into the Picocomputer **USB-A host** port; at `]` use `ls` / `cd` until you see the files.
+3. [ ] **`load`** several examples and note behavior on the console and VGA:
+   - [ ] Text/console (hello, echo, …)
+   - [ ] Graphics (mode1, mode2, mode3 — character, tile, bitmap)
+   - [ ] Input (e.g. gamepad)
+   - [ ] Audio (if present)
+4. [ ] Load **EhBASIC** and run a short program (`10 PRINT "HELLO"`, `20 GOTO 10`, `RUN`).
+5. [ ] Write down what surprised you or what you want to dig into later.
+
+---
+
+**B. `reset` after a `load` (vs `reboot` in §4.1)**
+
+`reboot` restarts the **whole RIA** and may apply **SET BOOT**. **`reset`** does not reboot the MCU; it releases the 6502 to run from the **current** reset vector in RAM (`$FFFC` / `$FFFD`).
+
+- [ ] Read `help reset` and compare to `help reboot`.
+- [ ] With a ROM already in RAM from **`load`** (e.g. EhBASIC), optionally `peek fffc fffd`, then **`reset`** — program should run. **CTRL-ALT-DEL** or UART break returns to `]`.
+
+---
+
+**C. Host serial — `UPLOAD` then `BINARY` (optional)**
+
+Same physical setup as §4.2. You need a way to send **exact bytes** after a text line (e.g. Python + `pyserial`); a plain typing terminal is not enough for **`BINARY`**.
+
+**UPLOAD** (file lands on the USB filesystem; then you can `load` it like any other file)
+
+- [ ] `help upload`; `upload test.bin`; at `}` send a small chunk (length + CRC + bytes), then `END` or blank line; confirm with `ls` / `unlink`.
+
+**BINARY** (direct RAM write; details in [notes/MONITOR.md](notes/MONITOR.md))
+
+- [ ] `help binary` — protocol: `BINARY addr len crc` + newline, then **`len`** raw bytes; **max 1024** per line; **CRC-32** on payload; valid range `$00000`–`$1FFFF`, transfer must not cross the **`$10000`** boundary (see [notes/MONITOR.md](notes/MONITOR.md)).
+- [ ] Send a few bytes to XRAM and verify with `10000` / `10000-1000F`. Skip if USB **`load`** is enough for you.
 
 ---
 
