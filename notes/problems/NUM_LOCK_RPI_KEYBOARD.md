@@ -1,6 +1,10 @@
 # Num Lock at Boot — RPi Keyboard and RP6502 Firmware
 
-Deep research on the Num Lock-on-at-boot issue with the official Raspberry Pi Keyboard and Hub when used with RP6502 RIA firmware v0.18+, and the recommended **PID/VID exception** solution.
+Notes on the Num Lock-on-at-boot issue with the official **Raspberry Pi Keyboard and Hub** on RP6502 RIA firmware v0.18+, how **upstream** fixes it, and why a **PID/VID exception** is still part of the firmware design.
+
+**Resolved in firmware v0.20** — Upgrade RIA to **v0.20 or newer** for the full fix (USB boot window + RPi keyboard exception). v0.19 had the PID/VID logic but **RF-off / slow-USB** setups could still miss the Num Lock clear until the `usb_init()` timer change shipped.
+
+**Upstream fix (summary):** (1) initialize the USB boot-enumeration window in `usb_init()`, so `usb_boot_enumerating()` stays true long enough for slow hub/keyboard setups; (2) keep clearing Num Lock for `0x04D9:0x0006` in `kbd_mount()` when still in that boot window (see §6).
 
 **Related:** [KEYBOARD_RASPBERRY_PI_HUB.md](KEYBOARD_RASPBERRY_PI_HUB.md) (keyboard product and connection), [LEARNING_PLAN.md](../LEARNING_PLAN.md) §3.3 (troubleshooting).
 
@@ -69,7 +73,7 @@ References: [USB ID Repository](https://usb-ids.gowdy.us/read/UD/04d9) (Holtek 0
 
 A loop iterates over device addresses (1 … `CFG_TUH_DEVICE_MAX`) and HID interface indices. For each interface with protocol `HID_ITF_PROTOCOL_KEYBOARD`, it sends the 1-byte `usb_hid_leds` report via `tuh_hid_set_report(..., HID_REPORT_TYPE_OUTPUT, &usb_hid_leds, ...)`.
 
-VID/PID are **not** currently used for keyboards; they are only passed to `pad_mount()` for gamepads. `tuh_vid_pid_get(dev_addr, &vendor_id, &product_id)` is already called in `tuh_hid_mount_cb()`.
+For keyboards, VID/PID are used in `kbd_mount()` for the RPi Num Lock exception (`kbd_numlock_off_at_boot`). For gamepads they are passed to `pad_mount()`. `tuh_vid_pid_get` is used where needed (e.g. `tuh_hid_mount_cb` → `kbd_mount`).
 
 ### Constants (`kbd.c`)
 
@@ -79,35 +83,49 @@ VID/PID are **not** currently used for keyboards; they are only passed to `pad_m
 
 ---
 
-## 6. Recommended Solution: PID/VID Exception in `usb.c`
+## 6. How upstream fixes it (`usb.c` + `kbd.c`)
 
-**Idea:** In the LED broadcast loop, before sending the LED report to a keyboard interface, read the device’s VID/PID. If it is the RPi keyboard (`0x04d9`, `0x0006`), send the same report **with the Num Lock bit cleared** for that device only. All other keyboards still get Num Lock on at boot.
+Firmware **v0.20+** (and current `main`) combines two mechanisms. The author reproduced a failure mode where **Wi-Fi / RF disabled** (`RF off`) changed boot timing so USB enumeration finished before the RPi keyboard (a composite device behind an internal hub) was ready — which is why **v0.19 alone** was not enough on some hardware.
 
-**Where:** `rp6502/src/ria/usb/usb.c`, inside the `while (usb_hid_leds_dev)` loop, where `tuh_hid_set_report` is called for keyboard interfaces.
+### 6.1 Boot enumeration window: `usb_init()`
 
-**Needed:**
+**File:** `rp6502/src/ria/usb/usb.c`
 
-1. Define RPi keyboard VID/PID (e.g. `RPI_KBD_VID 0x04D9`, `RPI_KBD_PID 0x0006`).
-2. Before `tuh_hid_set_report`, call `tuh_vid_pid_get(usb_hid_leds_dev, &vid, &pid)`.
-3. If `vid == RPI_KBD_VID && pid == RPI_KBD_PID`, use a local byte `leds = usb_hid_leds & ~KBD_LED_NUMLOCK`; otherwise `leds = usb_hid_leds`.
-4. Call `tuh_hid_set_report(..., &leds, sizeof(leds))` (so only this device sees Num Lock cleared).
-5. Include `hid/kbd.h` in `usb.c` to use `KBD_LED_NUMLOCK`, or use the literal `(1 << 0)`.
+At the end of `usb_init()`, after `tusb_init` and `tuh_hid_set_default_protocol`:
 
-**Why this is the right fix:**
+```c
+usb_enum_timeout = make_timeout_time_ms(USB_ENUM_WINDOW_MS);
+```
 
-- **Minimal:** One file, a small number of lines.
-- **Targeted:** Only `04d9:0006`; standard keyboards unchanged.
-- **No configuration:** No menus or user settings.
-- **Correct semantics:** RIA’s internal state (`kbd_hid_leds`) is unchanged; only the report sent to this keyboard has Num Lock cleared.
-- **Num Lock key still works:** Pressing Num Lock toggles `kbd_hid_leds`; the next LED report to the RPi keyboard again has Num Lock cleared, so the embedded numpad stays off.
-- **BLE keyboards:** Unaffected (they use `ble_set_hid_leds`, not this USB path).
+`USB_ENUM_WINDOW_MS` is `(255 + 100)` ms (comment in tree: max `bInterval` plus time for the slowest driver to mount).
+
+**Why it matters:** `usb_boot_enumerating()` uses `usb_enum_timeout` together with TinyUSB events (`ATTACH`, descriptor callbacks, `MOUNT`, etc.) to decide when “initial USB bring-up” is done. If that window was never anchored at host init, **idle timing** could mark boot enumeration finished **before** the slow keyboard path mounted. Debug logs on a bad setup showed something like `READY !!!` at **~854 ms** while the keyboard **HID mount** happened later (**~1.7 s**), so the RPi-specific Num Lock clear in `kbd_mount` never ran (it only runs while `usb_boot_enumerating()` is still true).
+
+Initializing the timeout in `usb_init()` fixes that class of bug for **all** callers of `usb_boot_enumerating()` (monitor, ROM paths, keyboard mount), not only Num Lock.
+
+### 6.2 PID/VID exception: `kbd.c` (not `usb.c` LED loop)
+
+**File:** `rp6502/src/ria/hid/kbd.c`
+
+- Table `kbd_numlock_off_at_boot[]` includes `{0x04D9, 0x0006}` (Raspberry Pi Keyboard).
+- In `kbd_mount()`, after the descriptor is parsed, if `conn->valid && usb_boot_enumerating()`, matching VID/PID runs:
+
+  `kbd_hid_leds &= ~KBD_LED_NUMLOCK;` then `kbd_send_leds();`
+
+So the **firmware’s LED state** and the **report sent to the keyboard** stay aligned.
+
+**Why not only patch `usb_task()` in `usb.c`?** Masking the Num Lock bit only in the outgoing `tuh_hid_set_report` byte, without updating `kbd_hid_leds`, can **desync** the host’s idea of Num Lock from the keyboard LED — e.g. first press after boot appears to do nothing. Upstream clears state in `kbd.c` and then sends LEDs through the normal path.
+
+### 6.3 Community debugging (historical)
+
+A closed PR tried a **one-time** Num Lock clear on first mount without `usb_boot_enumerating()` as a workaround when the window ended too early. Upstream’s `usb_init()` timer fix addresses the root cause; the PR is obsolete if you run **v0.20+** / current `main`.
 
 ---
 
 ## 7. What to Verify When Testing
 
 1. **Actual VID:PID** — With the keyboard connected via your OTG adapter, confirm (e.g. via `status` or a temporary debug print in `tuh_hid_mount_cb`) that VID=0x04d9, PID=0x0006.
-2. **Boot** — After the patch, cold boot: letters should type as letters without pressing Num Lock.
+2. **Boot** — On **v0.20+**, cold boot: letters should type as letters without pressing Num Lock.
 3. **Num Lock key** — Pressing Num Lock should still toggle between letters and embedded numpad on the right-hand keys.
 4. **Other keyboards** — Plugging a different keyboard should still get Num Lock on at boot.
 5. **Caps/Scroll Lock** — Should be unchanged (only Num Lock is masked for the RPi device).
@@ -127,7 +145,7 @@ VID/PID are **not** currently used for keyboards; they are only passed to `pad_m
 
 ## 9. References
 
-- Picocomputer author (Num Lock, Linux, PID/VID exception).
-- RP6502 firmware: `rp6502/src/ria/hid/kbd.c` (KBD_LED_*, kbd_init, kbd_send_leds), `rp6502/src/ria/usb/usb.c` (usb_task LED loop, tuh_hid_mount_cb, tuh_vid_pid_get).
+- Picocomputer author (Num Lock, Linux, PID/VID exception; `usb_init` boot window in **v0.20**; RF timing).
+- RP6502 firmware: `rp6502/src/ria/hid/kbd.c` (`kbd_numlock_off_at_boot`, `kbd_mount`, `kbd_init`, `kbd_send_leds`), `rp6502/src/ria/usb/usb.c` (`usb_init`, `usb_boot_enumerating`, `usb_enum_timeout`, `usb_task` LED loop).
 - USB IDs: [usb-ids.gowdy.us — Holtek 04d9 / 0006](https://usb-ids.gowdy.us/read/UD/04d9/0006).
 - LEARNING_PLAN.md §3.3 — Troubleshooting “Num Lock on at boot (v0.18)”.
